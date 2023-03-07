@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jafa.repository.BoardRepository">
+  
+  	<!-- 카테고리 -->
+  	<resultMap type="category" id="cateMap">
+  		<result property="cid" column="cid"/>
+  		<result property="cname" column="cname"/>
+  	</resultMap>
+	<!-- 카테고리 목록 -->
+	<select id="getCateList" resultMap="cateMap">
+		select * from CATEGORY_BOARD
+	</select>
+	<!-- 카테고리 추가 -->
+	<insert id="saveCate">
+		insert into CATEGORY_BOARD(cid,cname)
+		values(#{cid},#{cname})
+	</insert>
+  	<!-- 카테고리 삭제 -->
+  	<delete id="delCate">
+  		delete from CATEGORY_BOARD where cid=#{cid}
+  	</delete>
+  	
+  	
+  	<resultMap type="boardVO" id="boardMap">
+  		<result property="bno" column="bno"/>
+  		<result property="title" column="title"/>
+  		<result property="content" column="content"/>
+  		<result property="writer" column="writer"/>
+  		<result property="fileName" column="fileName"/>
+  		<result property="fileType" column="FileType"/>
+  		<result property="writeDate" column="writeDate"/>
+  		<collection property="category" resultMap="cateMap"/>
+  	</resultMap>
+  
+	<sql id="condition">
+		<trim prefix="and">
+			<choose>
+				<when test="type == 'T'.toString()"> 
+					title like '%'||#{keyword}||'%'
+				</when>
+				<when test="type == 'C'.toString()">
+					content like '%'||#{keyword}||'%'
+				</when>
+				<when test="type == 'W'.toString()">
+					writer like '%'||#{keyword}||'%'
+				</when>
+			</choose>
+		</trim>
+		<if test="category != null and category.cid != null and category.cid != ''">
+			and b.cid = #{category.cid}
+		</if> 
+	</sql>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from BOARD_TBL B
+		<where>
+			<include refid="condition" />
+		</where>
+	</select>
+  
+	<!-- 리스트 -->
+	<select id="list" resultMap="boardMap">
+	    <![CDATA[
+	    SELECT 
+	        rn, bno, title, content, fileName, writer, writeDate,
+	        cid, cname 
+	    FROM 
+	    (
+	        SELECT 
+	            /*+ index_desc(BOARD_TBL pk_board_tbl) */
+	            rownum rn, b.bno, b.title, b.content, b.fileName, b.writer, b.writeDate,
+	            c.cid, c.cname       
+	        FROM 
+	        BOARD_TBL b
+	        INNER JOIN CATEGORY_BOARD c 
+	        ON c.cid = b.cid
+	        WHERE rownum <= #{maxRow}
+	        ]]>
+	        	<include refid="condition" />
+	        )
+	        <![CDATA[
+	    WHERE rn > #{minRow}
+	    ]]>
+	</select>  
+
+	<select id="detail" resultType="boardVO">
+		select * from BOARD_TBL where bno=#{bno} 
+	</select>
+
+	<!-- 글쓰기 폼 -->
+	<insert id="write" useGeneratedKeys="true" keyColumn="bno" keyProperty="bno">
+		insert into BOARD_TBL(bno,cid,title,content,writer,fileName,fileType)
+		values(BOARD_BNO_SEQ.nextval,#{category.cid},#{title},#{content},#{writer},
+		#{fileName, jdbcType=VARCHAR}, #{fileType, jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="modify">
+		update BOARD_TBL
+		set
+			title = #{title},
+			content = #{content},
+			fileName = #{fileName, jdbcType=VARCHAR},
+			fileType = #{fileType, jdbcType=VARCHAR}
+		where bno = #{bno}
+	</update>
+
+	<update id="modifyOnlyContent">
+		update BOARD_TBL
+		set
+			title = #{title},
+			content = #{content}
+		where bno = #{bno}
+	</update>
+	
+	<delete id="remove">
+		delete from BOARD_TBL where bno=#{bno}
+	</delete>
+
+</mapper>
