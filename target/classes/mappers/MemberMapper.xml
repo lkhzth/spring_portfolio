@@ -37,5 +37,21 @@
 	<select id="memberList" resultMap="memberMap">
 		SELECT * FROM member_tbl
 	</select>
+
+		<!-- 관리자페이지에서 회원 상세정보조회(회원1명씩)-->
+	<select id="myPageDetail" resultType="memberVO">
+		SELECT * FROM member_tbl where mno=#{mno}
+	</select>
+	
+	<!-- 마이페이지 회원정보 수정 -->
+	<update id="update">
+		update member_tbl
+		 set 
+		 memberName=#{memberName}, 
+		 memberEmail=#{memberEmail}, 
+		 memberAddress=#{memberAddress}, 
+		 memberPhone=#{memberPhone} where mno=#{mno}
+	</update>
+	
 </mapper>
 

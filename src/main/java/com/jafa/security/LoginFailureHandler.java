@@ -17,9 +17,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 
-@Log4j
 @Setter
 @Getter
 @Component
@@ -33,8 +31,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
-		log.info("로그인실패");
-		
 		String loginId = request.getParameter("loginId");
 		
 		if(exception instanceof BadCredentialsException) {
@@ -52,5 +48,4 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 		request.setAttribute("loginId", loginId);
 		request.getRequestDispatcher(defaultFailureUrl).forward(request, response);
 	}
-
 }

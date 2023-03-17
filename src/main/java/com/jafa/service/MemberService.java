@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jafa.domain.AuthVO;
+import com.jafa.domain.MemberDTO;
 import com.jafa.domain.MemberType;
 import com.jafa.domain.MemberVO;
+import com.jafa.domain.ReplyVO;
 import com.jafa.repository.AuthRepository;
 import com.jafa.repository.MemberRepository;
 
@@ -22,16 +24,17 @@ public class MemberService {
 	@Autowired
 	AuthRepository authRepository; 
 	
+	// 비밀번호 암호화 
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
 	// 회원가입
 	@Transactional
-	public void join(MemberVO vo) {
-		vo.setPassword(passwordEncoder.encode(vo.getPassword()));
-		memberRepository.save(vo);
+	public void join(MemberDTO dto) {
+		dto.setPassword(passwordEncoder.encode(dto.getPassword())); // 비밀번호 암호화 
+		memberRepository.save(dto);
 		AuthVO authVO = AuthVO.builder()
-				.memberId(vo.getMemberId())
+				.memberId(dto.getMemberId())
 				.memberType(MemberType.ROLE_ASSOCIATE_MEMBER)
 				.ordinal(MemberType.ROLE_ASSOCIATE_MEMBER.ordinal())
 				.build();
@@ -43,7 +46,7 @@ public class MemberService {
 	public void updateMemberType(AuthVO authVO) {
 		authRepository.remove(authVO.getMemberId()); // 모든 등급 삭제
 		MemberType memberType = authVO.getMemberType(); // 변경할 회원등급
-		MemberType[] types = MemberType.values();
+		MemberType[] types = MemberType.values(); // 전체 회원등급
 		for(int i = memberType.ordinal(); i < types.length; i++) {
 			AuthVO vo = AuthVO.builder()
 					.memberId(authVO.getMemberId())

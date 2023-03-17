@@ -9,11 +9,9 @@
 	</div>
 
 <div class="container">
-	<h1>인덱스</h1>
 	<div>
 		<spring:message code="main.greeting" arguments="${name},${welcome}"/>
 	</div>
-	
 </div>
 
 <%@ include file="layout/footer.jsp" %>

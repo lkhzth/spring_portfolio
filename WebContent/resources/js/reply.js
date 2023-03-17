@@ -2,6 +2,9 @@ console.log('reply.js');
 
 var replyService = (function() {
 	
+	const token = $("[name='_csrf']").val()
+	const header = $("[name='_csrf_header']").val()
+	
 	// 댓글추가
 	function add(reply, callback, error) {
 		// reply : 댓글 객체
@@ -15,6 +18,9 @@ var replyService = (function() {
 			data: JSON.stringify(reply),
 			// 전달 받은 객체를 json으로 변환.
 			contentType: "application/json; charset=utf-8",
+			beforeSend : function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
 			success: function(result) {
 				if (callback) {
 					callback(result);
@@ -99,6 +105,9 @@ var replyService = (function() {
             url : `${contextPath}/reply/` + reply.rno,
             data : JSON.stringify(reply),
             contentType : "application/json;charset=utf-8",
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
             success : function(result, status, xhr) {
                 if(callback){
                     callback(result);
@@ -113,6 +122,9 @@ var replyService = (function() {
     	$.ajax({
     		type : 'delete',
     		url : `${contextPath}/reply/` + rno,
+    		beforeSend : function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
     		success : function(deleteResult, status, xhr) {
     			if (callback) {
     				callback(deleteResult);

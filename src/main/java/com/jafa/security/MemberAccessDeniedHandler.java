@@ -22,7 +22,5 @@ public class MemberAccessDeniedHandler implements AccessDeniedHandler {
 		log.info("AccessDeniedHandler 동작 ");
 		log.info("접근거부핸들러");
 		response.sendRedirect(request.getContextPath() + "/member/accessError");
-	
 	}
-
 }

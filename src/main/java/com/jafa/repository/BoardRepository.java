@@ -8,7 +8,7 @@ import com.jafa.domain.Criteria;
 
 public interface BoardRepository {
 		
-	// 카테고리
+	// 게시판카테고리
 	List<Category> getCateList();
 
 	void saveCate(Category category);

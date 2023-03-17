@@ -50,5 +50,4 @@ $(function() {
 		}
 		goDetailForm.appendTo('body').submit();
 	})
-	
 });

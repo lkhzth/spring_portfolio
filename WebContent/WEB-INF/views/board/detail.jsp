@@ -3,9 +3,11 @@
 
 <%@ include file="../layout/header.jsp" %>
 
+<%-- <sec:authentication property="principal.username"/> --%>
+
 <div class="container">
 	<div class="jumbotron">
-		<h2>상세</h2> 
+		<h2>게시물상세</h2> 
 	</div>
 	<div class="card">
 		<div class="card-header">
@@ -23,9 +25,11 @@
 			${b.content}
 		</div>
 		<div class="card-footer">
-			<button class="btn btn-warning modBoard">수정</button>
-			<button class="btn btn-danger delBoard">삭제</button>
-			<a href="${contextPath}/board/list"><button class="btn btn-info">목록</button></a>
+			<sec:authorize access="isAuthenticated()"> <!-- 권한이 있는 경우(로그인한 사용자) -->
+				<button class="btn btn-warning modBoard">수정하기</button>
+				<button class="btn btn-danger delBoard">삭제하기</button>
+			</sec:authorize>
+			<a href="${contextPath}/board/list"><button class="btn btn-info">목록으로</button></a>
 		</div>
 	</div>	
 
@@ -63,26 +67,16 @@
 			</div>
 		</div>	
 	</c:if>
-	<!-- <div>
-	    <form method="post" action="/reply/write">
-	        <p>
-	            <label>댓글 작성자</label> <input type="text" name="writer">
-	        </p>
-	        <p>
-	            <textarea rows="5" cols="50" name="content"></textarea>
-	        </p>
-	        <p>
-	            <button type="submit">댓글 작성</button>
-	        </p>
-	    </form>
-	</div> -->
+
 	<!-- 덧글 목록 시작 -->
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<i class="fa fa-comments fa-fw">
-						<button id="addReplyBtn" class="btn btn-primary btn-xs float-right">댓글작성</button><br>
+						<sec:authorize access="isAuthenticated()"> <!-- 권한이 있는 경우(로그인한 사용자) -->
+							<button id="addReplyBtn" class="btn btn-primary btn-xs float-right">댓글작성</button>
+						</sec:authorize><br>
 					</i>
 				</div>
 				<br>
@@ -117,9 +111,12 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button id="modalModBtn" type="button" class="btn btnwarning">수정</button>
-					<button id="modalRemoveBtn" type="button" class="btn btndanger">삭제</button>
-					<button id="modalRegisterBtn" type="button" class="btn btnprimary">등록</button>
+					<sec:authorize access="isAuthenticated()">
+						<button id="modalModBtn" type="button" class="btn btnwarning">수정</button>
+						<button id="modalRemoveBtn" type="button" class="btn btndanger">삭제</button>
+						<button id="modalRegisterBtn" type="button" class="btn btnprimary">등록</button>
+					</sec:authorize>
+					<!-- 로그인 하지 않을경우 모달창에서 수정,삭제불가 로그인 후 회원,관리자일때 버튼보이도록-->
 					<button id="modalCloseBtn" type="button" class="btn btndefault">닫기</button>
 				</div>
 			</div>
@@ -127,18 +124,21 @@
 	</div>
 	<!-- 덧글 작성 모달 끝 -->
 </div>
-
 <%@ include file="../layout/footer.jsp" %>
 
 <script>
 $(function() {
+	
 	$('.delBoard').on('click', function() {
+		const token = $("[name='_csrf']").val()
+		const header = $("[name='_csrf_header']").val()
+		
 		$('<form/>').attr('method','post')
+			.append($('<input/>').attr('type','hidden').attr('name','_csrf').val(token))
 			.attr('action','${contextPath}/board/remove?bno=${b.bno}')
 			.appendTo('body')
 			.submit();
 	})
-	
 	$('.modBoard').on('click', function() {
 		$('<form/>').attr('method','get')
 			.attr('action','${contextPath}/board/modify')
@@ -147,16 +147,7 @@ $(function() {
 			.submit();
 	})
 	
-	
 	var bnoValue = '<c:out value="${b.bno}"/>';
-		/* replyService.add({
-			reply : "js test",
-			replyer : "tester",
-			bno : bnoValue
-		}, function(result){
-			alert("result: " + result);
-		}); // 게시글을 읽을때 자동으로 댓글 1개 등록. */
-	
 		var modal = $("#myModal");
 		// 덧글 용 모달.
 		var modalInputReplyDate = modal.find("input[name='replyDate']");
@@ -171,7 +162,9 @@ $(function() {
 		// 덧글 입력 모달창 보이기
 		$("#addReplyBtn").on("click", function(e){
 			// 덧글 쓰기 버튼을 클릭한다면,
+					
 			modal.find("input").val("");
+			modal.find("input").removeAttr("readonly");
 			// 모달의 모든 입력창을 초기화
 			modalInputReplyDate.closest("div").hide();
 			// closest : 선택 요소와 가장 가까운 요소를 지정.
@@ -188,6 +181,7 @@ $(function() {
 			// 모달 닫기 라는 버튼을 클릭한다면 모달창을 숨김.
 		});
 		
+			
 		// 덧글 쓰기
 		modalRegisterBtn.on("click", function(e){
 			// 덧글 등록 버튼을 눌렀다면,
@@ -197,7 +191,7 @@ $(function() {
 					bno : bnoValue
 			}; // ajax로 전달할 reply 객체 선언 및 할당.
 			replyService.add(reply, function(result){
-				alert(result);
+				alert(result); 
 				// ajax 처리후 결과 리턴.
 				modal.find("input").val("");
 				// 모달창 초기화
@@ -266,7 +260,8 @@ $(function() {
            
            replyService.get(rno,function(reply){
                modalInputReply.val(reply.reply);
-               modalInputWriter.val(reply.writer);
+               modalInputWriter.val(reply.writer)
+               			.attr("readonly", "readonly");
                modalInputReplyDate.val(replyService.displayTime(reply.replyDate))
                        .attr("readonly", "readonly"); 
                // 댓글 목록의 값들을 모달창에 할당.

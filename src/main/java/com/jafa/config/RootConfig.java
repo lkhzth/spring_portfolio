@@ -20,6 +20,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import com.jafa.domain.BoardVO;
 import com.jafa.domain.Category;
 import com.jafa.domain.MemberVO;
+import com.jafa.domain.ProductCategory;
+import com.jafa.domain.ProductVO;
 import com.jafa.domain.ReplyVO;
 
 @Configuration
@@ -52,7 +54,7 @@ public class RootConfig {
 		factory.setDataSource(dataSource());
 		factory.setMapperLocations(new PathMatchingResourcePatternResolver()
 				.getResources("classpath:mappers/**/*Mapper.xml"));
-		factory.setTypeAliases(BoardVO.class, Category.class, ReplyVO.class, MemberVO.class);
+		factory.setTypeAliases(BoardVO.class, Category.class, ReplyVO.class, MemberVO.class, ProductVO.class, ProductCategory.class);
 		return factory;
 	}
 
@@ -76,7 +78,7 @@ public class RootConfig {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 	
-	// 파일업로드 설정
+	// 파일업로드 설정(게시판글첨부이미지, 상품이미지)
 	// 이름은 반드시 multipartResolver
 	@Bean
 	public CommonsMultipartResolver multipartResolver() {

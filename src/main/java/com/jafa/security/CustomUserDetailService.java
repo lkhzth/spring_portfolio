@@ -1,4 +1,4 @@
-package com.jafa.service;
+package com.jafa.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

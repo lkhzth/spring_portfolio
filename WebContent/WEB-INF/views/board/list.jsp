@@ -5,6 +5,11 @@
 
 <input type="hidden" name="page" class="page" value="${cri.page}">
 <div class="container">
+	<sec:authorze access="isAuthenticated()">
+		<sec:authentication property="principal.memberVO.memberEmail" var="sesdddd"/>
+		<sec:authentication property="principal.memberVO.memberEmail"/>
+		${sesdddd }
+	</sec:authorize>
 	<div class="jumbotron">
 		<h1>게시판</h1>
 	</div>
@@ -63,8 +68,9 @@
 							<input type="hidden" class="cateName" value="${b.category.cname}">
 						</td>
 						<td>
-							<!-- <a href="${contextPath}/board/detail?bno=${b.bno}">${b.title}</a> -->
-							<a href="${b.bno}" class="goDetail">${b.title}</a>
+							<sec:authorize access="isAuthenticated()">
+								<a href="${b.bno}" class="goDetail">${b.title}</a>
+							</sec:authorize>
 						</td>
 						<td>${b.fileName}</td>
 						<td>${b.writer}</td>
@@ -74,7 +80,9 @@
 			</table>
 			
 			<div class="mb-2">
-				<a href="${contextPath}/board/write" class="btn btn-primary">글쓰기</a>
+				<sec:authorize access="isAuthenticated()"> <!-- 권한이 있는 경우(로그인한 사용자) -->
+					<a href="${contextPath}/board/write" class="btn btn-primary">글쓰기</a>
+				</sec:authorize>
 			</div>
 			
 			<div class="d-flex justify-content-center">

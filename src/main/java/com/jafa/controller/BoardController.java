@@ -2,9 +2,7 @@ package com.jafa.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +21,9 @@ import com.jafa.domain.BoardVO.FileType;
 import com.jafa.domain.Category;
 import com.jafa.domain.Criteria;
 import com.jafa.domain.Pagination;
+import com.jafa.domain.ProductCategory;
 import com.jafa.repository.BoardRepository;
+import com.jafa.repository.ProductRepository;
 
 import lombok.extern.log4j.Log4j;
 
@@ -36,10 +36,19 @@ public class BoardController {
 	@Autowired
 	BoardRepository repository;
 	
+	@Autowired
+	ProductRepository productRepository;
+	
 	@ModelAttribute("cateList")
 	public List<Category> cateList(){
 		return repository.getCateList();
 	}
+	
+	@ModelAttribute("productCateList")
+	public List<ProductCategory> productCateList(){
+		return productRepository.getProductCateList();
+	}
+	
 	
 	// 목록
 	@GetMapping(value = {"/list/{cid}", "/list"})
@@ -68,8 +77,9 @@ public class BoardController {
 
 	// 글쓰기처리
 	@PostMapping("/write")
-	public String write(BoardVO vo, 
-			@RequestParam("attachFile") MultipartFile multipartFile, RedirectAttributes rttr) {
+	public String write(BoardVO vo,
+			@RequestParam("attachFile") MultipartFile multipartFile,
+			RedirectAttributes rttr) {
 		
 		if(!multipartFile.isEmpty()) { // 첨부파일이 있을때
 			String fileName = multipartFile.getOriginalFilename(); // 첨부파일 이름

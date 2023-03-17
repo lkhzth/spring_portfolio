@@ -6,8 +6,11 @@
 	<div class="jumbotron">
 		<h1>글쓰기</h1>
 	</div>
-	${cateList }		
-	<form action="${contextPath}/board/write" method="post" enctype="multipart/form-data">
+
+${loginId}
+
+	<form action="${contextPath}/board/write?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data">
+		<!-- ?bno=1 -->
 		<table class="table">
 			<tr>
 				<td class="col-2">게시판분류</td>
@@ -38,8 +41,6 @@
 		</table>
 		<button>확인</button>
 	</form>	
-
-
 </div>
 
 <%@ include file="../layout/footer.jsp"%>

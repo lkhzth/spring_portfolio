@@ -5,7 +5,7 @@
 
 <div class="container">
 	<h1>글수정</h1>
-	<form action="${contextPath}/board/modify" method="post" enctype="multipart/form-data">
+	<form action="${contextPath}/board/modify?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="bno" value="${b.bno}">
 		<table class="table">
 			<tr>
@@ -49,7 +49,7 @@
 						</c:if>
 					</c:if>
 				</td>
-			</tr>0
+			</tr>
 			<tr>
 				<td colspan="2">
 					<button class="btn btn-primary">수정</button>

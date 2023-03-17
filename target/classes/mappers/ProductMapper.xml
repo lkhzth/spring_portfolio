@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jafa.repository.ProductRepository">
+  
+  	<!-- 카테고리 -->
+  	<resultMap type="productCategory" id="cateMap">
+  		<result property="cateId" column="cateId"/>
+  		<result property="cateName" column="cateName"/>
+  	</resultMap>
+	<!-- 카테고리 목록 -->
+	<select id="getProductCateList" resultMap="cateMap">
+		select * from CATEGORY_PRODUCT
+	</select>
+	<!-- 카테고리 추가 -->
+	<insert id="saveProductCate">
+		insert into CATEGORY_PRODUCT(cateId,cateName)
+		values(#{cateId},#{cateName})
+	</insert>
+  	<!-- 카테고리 삭제 -->
+  	<delete id="delProductCate">
+  		delete from CATEGORY_PRODUCT where cateId=#{cateId}
+  	</delete>
+  	
+  	
+  	<resultMap type="productVO" id="productMap">
+		<result property="product_Bno" column="product_Bno"/>
+		<result property="product_Name" column="product_Name"/>
+		<result property="product_Intro" column="product_Intro"/>
+		<result property="product_Content" column="product_Content"/>
+		<result property="product_Size" column="product_Size"/>
+		<result property="product_Weight" column="product_Weight"/>
+		<result property="product_Price" column="product_Price"/>
+		<result property="product_Stock" column="product_Stock"/>
+		<result property="fileName_Product" column="fileName_Product"/>
+		<result property="fileType_Product" column="fileType_Product"/>
+		<collection property="productCategory" resultMap="cateMap"/>
+  	</resultMap>
+  
+	<sql id="condition">
+		<trim prefix="and">
+			<choose>
+				<when test="type == 'N'.toString()"> 
+					product_Name like '%'||#{keyword}||'%'
+				</when>
+				<when test="type == 'C'.toString()">
+					product_Content like '%'||#{keyword}||'%'
+				</when>
+			</choose>
+		</trim>
+		<if test="productCategory != null and productCategory.cateId != null and productCategory.cateId != ''">
+			and p.cateId = #{productCategory.cateId}
+		</if> 
+	</sql>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from PRODUCT_TBL P
+		<where>
+			<include refid="condition" />
+		</where>
+	</select>
+  
+	<!-- 리스트 -->
+	<select id="list" resultMap="productMap">
+	    <![CDATA[
+	    SELECT 
+	        rn, product_Bno, product_Name, product_Intro, product_Content, product_Size, product_Weight, product_Price, product_Stock, fileName_Product,
+	        cateId, cateName 
+	    FROM 
+	    (
+	        SELECT 
+	            /*+ index_desc(PRODUCT_TBL pk_product_tbl) */
+	            rownum rn, p.product_Bno, p.product_Name, p.product_Intro, p.product_Content, p.product_Size, p.product_Weight, p.product_Price, p.product_Stock, p.fileName_Product,
+	            c.cateId, c.cateName       
+	        FROM 
+	        PRODUCT_TBL p
+	        INNER JOIN CATEGORY_PRODUCT c 
+	        ON c.cateId = p.cateId
+	        WHERE rownum <= #{maxRow}
+	        ]]>
+	        	<include refid="condition" />
+	        )
+	        <![CDATA[
+	    WHERE rn > #{minRow}
+	    ]]>
+	</select>  
+
+	<select id="detail" resultType="productVO">
+		select * from PRODUCT_TBL where PRODUCT_BNO=#{PRODUCT_BNO} 
+	</select>
+
+	<!-- 글쓰기 폼 -->
+	<insert id="write" useGeneratedKeys="true" keyColumn="product_Bno" keyProperty="product_Bno">
+		INSERT INTO PRODUCT_TBL(PRODUCT_BNO, cateId, PRODUCT_NAME, PRODUCT_INTRO, PRODUCT_CONTENT, PRODUCT_SIZE, PRODUCT_weight, PRODUCT_PRICE, PRODUCT_STOCK, fileName_Product, fileType_Product) 
+		values(PRODUCT_BNO_SEQ.NEXTVAL, #{productCategory.cateId}, #{product_Name}, #{product_Intro}, #{product_Content}, #{product_Size}, #{product_Weight}, #{product_Price}, #{product_Stock}, 
+		#{fileName_Product, jdbcType=VARCHAR}, #{fileType_Product, jdbcType=VARCHAR})
+	</insert>
+	<!-- 
+		글작성 안됨 here is no getter for property named 'PRODUCT_NAME' in 'class com.jafa.domain.ProductVO 게터가 없음
+		위쪽 resultMap에서 property명과 insert문의 values뒤에 들어가는 속성이 일치해야하는데 달라서 getter를 못찾음 해결됨
+	 -->
+	
+	
+	<update id="modify">
+		update PRODUCT_TBL
+		set
+			product_Name = #{product_Name},
+			product_Intro = #{product_Intro},
+			product_Content = #{product_Content},
+			product_Size = #{product_Size},
+			product_Weight = #{product_Weight},
+			product_Price = #{product_Price},
+			product_Stock = #{product_Stock},
+			fileName_Product = #{fileName_Product, jdbcType=VARCHAR},
+			fileType_Product = #{fileType_Product, jdbcType=VARCHAR}
+		where product_Bno = #{product_Bno}
+	</update>
+
+	<update id="modifyOnlyContent">
+		update PRODUCT_TBL
+		set
+			product_Name = #{product_Name},
+			product_Intro = #{product_Intro},
+			product_Content = #{product_Content},
+			product_Size = #{product_Size},
+			product_Weight = #{product_Weight},
+			product_Price = #{product_Price},
+			product_Stock = #{product_Stock}
+		where product_Bno = #{product_Bno}
+	</update>
+	
+	<delete id="remove">
+		delete from PRODUCT_TBL where product_Bno=#{product_Bno}
+	</delete>
+
+</mapper>

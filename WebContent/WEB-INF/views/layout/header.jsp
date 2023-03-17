@@ -4,17 +4,23 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %> <!-- validation 용도 회원가입시 에러메세지 표시 이것 없어서 표시안됐음-->
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- 헤더토큰설정 -->
+<input type="hidden" name="_csrf_header" value="${_csrf.headerName}" />
+<input type="hidden" name="_csrf" value="${_csrf.token}" />
 
 <style>
 	.lh{vertical-align: center}
@@ -33,6 +39,20 @@
 <script src="${contextPath}/resources/js/detail.js"></script>
 <script src="${contextPath}/resources/js/reply.js"></script>
 
+<%-- <sec:authorize access="isAuthenticated()">
+	<sec:authentication property="principal.username"/>
+	<sec:authentication property="principal.memberVO.authList" var="authList"/>
+	<script>
+	let memberType = [];
+	<c:forEach items="${authList}" var="auth">
+		memberType.push("${auth.memberType}");	
+	</c:forEach>
+	</script>
+</sec:authorize>
+<script>
+console.log(memberType)
+</script> --%>
+
 </head>
 <body>
 	<div class="container">
@@ -41,10 +61,16 @@
 		    <li class="nav-item active">
 		      <a class="nav-link" href="${contextPath}">Home</a>
 		    </li>
-		    <li class="nav-item">
-		      <a class="nav-link" href="#">상품소개</a>
+ 
+		    <li class="dropdown">
+		      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">상품소개</a>
+		      <div class="dropdown-menu">
+		      	<c:forEach items="${productCateList}" var="p">
+					  	<a class="dropdown-item" href="${contextPath}/product/list/${p.cateId}">${p.cateName}</a>
+				</c:forEach>
+		      </div>
 		    </li>
-		    
+
 		    <li class="dropdown">
 		      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">게시판</a>
 		      <div class="dropdown-menu">
@@ -65,14 +91,15 @@
 				<div class="d-flex justify-content-between">
 					<div class="d-flex justify-content-between mr-3">
 						<sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')">
-							<a class="nav-link" href="${contextPath}/member/admin">관리자페이지</a><br>
-							<a class="nav-link" href="${contextPath}/member/myPage">회원페이지</a><br>
+							<a class="nav-link" href="${contextPath}/member/admin">회원등급변경</a><br>
+							<a class="nav-link" href="${contextPath}/admin/cateProduct">관리자상품등록</a><br>
+							<a class="nav-link" href="${contextPath}/admin/cateBoard">관리자게시판등록</a><br>
 						</sec:authorize>
 					</div>
-					
 					<sec:authorize access="isAuthenticated()"> <!-- 권한이 있는 경우(로그인한 사용자) -->
 						<form action="${contextPath}/member/logout" method="post">
 							<div class="d-flex justify-content-between">
+								<a class="nav-link" href="${contextPath}/member/myPage">마이페이지</a><br>
 								<p class="lh"><b><sec:authentication property="principal.username" /></b>님 로그인 중</p>
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 								<button class="btn btn-danger ml-3">로그아웃</button>
@@ -80,7 +107,6 @@
 						</form>
 					</sec:authorize>
 				</div>
-				
 		    </li>
 		  </ul>
 		</nav>
