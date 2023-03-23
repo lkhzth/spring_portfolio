@@ -5,18 +5,36 @@
 
 <sec:authorize access="isAuthenticated()">
 		<sec:authentication property="principal.memberVO" var="loginIdNow"/>
-	</sec:authorize>
-	
-	${loginIdNow }
+</sec:authorize>
+<!-- 컨트롤러에서 쓰임이 없을시 login된 아이디불러올때 선언 loginIdNow -> ${loginIdNow} -->
 
-<div class="container">
-	<div class="jumbotron bg-warning">
-		<h1>회원관리</h1>
+<!-- memberController myPage에서 가져온 modelAdd-->
+<%-- 	memberVO : ${memberVO.authList}<br><!-- 현재 로그인상태의 유저등급 -->
+=======================================================<br>
+	authList : ${authList}<br><!-- 전체 등급리스트 -->
+==================================================<br>
+	${memberVO.authList[0].memberType}
+====================================================<br>
+	로그인 아이디 : ${memberVO.memberId}
+=============================================<br>
+	${mType[0]}
+==============================================<br> --%>
+
+<div style="padding: 0 220px">
+	<div class="jumbotron-center bg-white">
+		<c:choose>
+			<c:when test="${memberVO.authList[0].memberType eq mType[0]}">
+				<h1 class="text-center my-5">전체회원정보(관리자)</h1>
+			</c:when>
+			<c:otherwise>
+				<h1 class="text-center my-5">마이페이지</h1>
+			</c:otherwise>
+		</c:choose>
 	</div>
 
-	<form action="${contextPath}/member/myPage?${_csrf.parameterName}=${_csrf.token}" method="post">
-		<%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"> --%>
-		<table class="table">
+	<%-- <form action="${contextPath}/member/updateMember" method="post">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"> --%>
+		<table class="table" >
 			<tr>
 				<th>번호</th>
 				<th>아이디</th>
@@ -26,16 +44,14 @@
 				<th>휴대폰번호</th>
 				<th>회원상태</th>
 				<th>회원등급</th>
-				<th>회원정보수정</th>
+				<th>회원상세</th>
 			</tr>
 			<c:choose>
-				<c:when test="${memberInfo.authList[0].memberType eq mType[0]}">
+				<c:when test="${memberVO.authList[0].memberType eq mType[0]}">
 					<c:forEach items="${list}" var="m" varStatus="mst">
 						<tr>
 							<td>
 								${m.mno}
-								<input type="hidden" class="form-control modifyMno" name="mno" 
-								value='<c:out value="${m.mno}"/>' readonly="readonly">
 							</td>
 							<td>${m.memberId}</td>
 							<td>${m.memberName}</td>
@@ -45,79 +61,38 @@
 							<td>${m.enabled}</td>
 							<td>${m.authList[0].memberType}</td>
 							<td>
-								<div class="text-right pb-2">
-									<div class="row">
-										<div class="col-lg-9">
-											<div class="panel panel-default">
-												<div class="panel-heading">
-													<i class="fa fa-comments fa-fw">
-														<button type="button" class="btn btn-success btn-xs float-right modifyInfo">정보수정</button><br>
-													</i>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
+								<button name="mno" class="btn btn-warning adminMod" data-mno="${m.mno}">정보수정</button>
 							</td>
 						</tr>
 					</c:forEach>
 				</c:when>
 				<c:otherwise>
 					<tr>
-						<td>${memberInfo.mno}</td>
-						<td>${memberInfo.memberId}</td>
-						<td>${memberInfo.memberName}</td>
-						<td>${memberInfo.memberEmail}</td>
-						<td>${memberInfo.memberAddress}</td>
-						<td>${memberInfo.memberPhone}</td>
-						<td>${memberInfo.enabled}</td>
-						<td>${loginIdNow.authList[0].memberType}</td>
 						<td>
-							<div class="text-right pb-2">
-								<div class="row">
-									<div class="col-lg-8">
-										<div class="panel panel-default">
-											<div class="panel-heading">
-												<i class="fa fa-comments fa-fw">
-													<button class="btn btn-success btn-xs float-right modifyInfo">정보수정</button><br>
-												</i>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							${memberVO.mno}
+						</td>
+						<td>${memberVO.memberId}</td>
+						<td>${memberVO.memberName}</td>
+						<td>${memberVO.memberEmail}</td>
+						<td>${memberVO.memberAddress}</td>
+						<td>${memberVO.memberPhone}</td>
+						<td>${memberVO.enabled}</td>
+						<td>${memberVO.authList[0].memberType}</td>
+						<td>
+							<button name="mno" class="btn btn-warning userMod">정보수정</button>
 						</td>
 					</tr>	
 				</c:otherwise>
 			</c:choose>
-		<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel"정보수정창</h5>
-					</div>
-					<div class="modal-body">
-						<div class="form-group">
-							<label>이름</label><input class="form-control" name="memberName" value="${m.memberName}">
-						</div>
-						<div class="form-group">
-							<label>이메일</label><input class="form-control" name="memberEmail" value="${m.memberEmail}">
-						</div>
-						<div class="form-group">
-							<label>주소</label><input class="form-control" name="memberAddress" value="${m.memberAddress}">
-						</div>
-						<div class="form-group">
-							<label>휴대폰번호</label><input class="form-control" name="memberPhone" value="${m.memberPhone}">
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button id="modalModBtn" type="button" class="btn btnwarning">수정</button>
-						<button id="modalCloseBtn" type="button" class="btn btndefault">닫기</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		</table>
 		
+		<div class="jumbotron-center bg-white">
+			<h3>주문상세내역</h3>
+		</div>
+		<table class="table">
+			<tr>
+				${list}							
+			</tr>
 		</table>
 		
 		<div class="float-right">
@@ -126,117 +101,43 @@
 				<a class="btn btn-primary" href="${contextPath}/board/list">메인게시판</a>
 			</sec:authorize>
 		</div>
-	</form>
+	<!-- </form> -->
 	</div>
 </div>
 
 <%@ include file="../layout/footer.jsp" %>
 
 <script>
-$(function() {
-	
-	var bnoValue = '<c:out value="${m.mno}"/>';
-	var modal = $("#myModal");
-	// 회원리스트 수정용 모달.
-	var modalInputMemberName = modal.find("input[name='memberName']");
-	var modalInputMemberEmail = modal.find("input[name='memberEmail']");
-	var modalInputMemberAddress = modal.find("input[name='memberAddress']");
-	var modalInputMemberPhone = modal.find("input[name='memberPhone']");
-	// 리스트 항목.
-	var modalModBtn = $("#modalModBtn");
-	// 모달에서 표시되는 수정버튼.
-	
-	// 정보수정 모달창 보이기
-	$(".modifyInfo").on("click", function(e){
-		// 수정 버튼을 클릭한다면,
-		$("#myModal").modal("show"); // 모달 표시.
-		
-			var mno = $('.modifyMno').val();
-        // 회원리스트에 포함된 값들 중에서 mno를 추출하여 변수 할당.
-        
-        modService.myPageDetail(mno,function(modifyMember){
-        	modalInputMemberName.val(modifyMember.memberName);
-        	modalInputMemberEmail.val(modifyMember.memberEmail);
-        	modalInputMemberAddress.val(modifyMember.memberAddress);
-        	modalInputMemberPhone.val(modifyMember.memberPhone);
-            // 댓글 목록의 값들을 모달창에 할당.
-            modal.data("mno", modifyMember.mno);
-            
-            
-            // 표시되는 모달창에 rno 라는 이름으로 data-rno를 저장.
-            $("#myModal").modal("show");
-        });
-		
+$(function(){
+	$('.adminMod').on('click', function() {
+		let mno = $(this).data('mno');
+		$('<form/>').attr('method','get')
+			.attr('action','${contextPath}/member/myPageDetail')
+			.append('<input type="hidden" value="'+mno+'" name="mno">')
+			.appendTo('body')
+			.submit();
 	});
 	
-	$('.modifyInfo').click(function() {
-		$('#myModal').show();
-	})
-	 
-	$('.btndefault').click(function() {
-		$("#myModal").modal("hide");
-	})
-	
-	
-	var mnoValue = $('.modifyMno').val();
-	
-	// 회원정보 수정처리
-	$('#modalModBtn').on("click", function() {
-		var modifyMember = {
-				mno : mnoValue,
-				modifyMemberName : $('.modal').find("input[name='memberName']").val(),
-				modifymemberEmail : $('.modal').find("input[name='memberEmail']").val(),
-				modifymemberAddress : $('.modal').find("input[name='memberAddress']").val(),
-				modifymemberPhone : $('.modal').find("input[name='memberPhone']").val()
-		};
-		modService.update(modifyMember, function(result){
-			alert(result);
-			$('.modal').modal("hide");
-			showList(-1);
-		}); 
-	}); 
-});
+	$('.userMod').on('click', function() {
 
- 
- // 회원정보처리 js, ajax
- var modService = (function() {
-		const token = $("[name='_csrf']").val()
-		const header = $("[name='_csrf_header']").val()
-
-		// 한 개의 회원정보를 읽는 기능창생성
-	 function myPageDetail(mno, callback, error){
-        $.get(`${contextPath}/member/` + mno, function(result){
-            if(callback){
-                callback(result);
-            }
-        }).fail(function(xhr, status, er){
-            if(error){
-                error(er);
-            }
-        });
-    }
+		$('<form/>').attr('method','get')
+			.attr('action','${contextPath}/member/myPageDetail')
+			.append('<input type="hidden" value="${memberVO.mno}" name="mno">')
+			.appendTo('body')
+			.submit();
+	});
+	
+	// 회원정보수정 페이지 구현
+	/* let count = 0;
+	$('.modify').on('click',function(e){
+		$(this).closest('tr').find('input').attr('disabled',false);
+		let inputNameAttr = $(this).closest('tr').find('input').attr('name');
+		let test = inputNameAttr.replace("order",count);
+		$(this).closest('tr').find('input').attr('name', test);
+		console.log(test);
+		var mno =$(this).closest('tr').find("[name='mno']").val();
+		count++;
 		
-	function update(modifyMember, callback, error){
-		$.ajax({
-            type : 'put',
-            url : `${contextPath}/member/` + modifyMember.mno,
-            data : JSON.stringify(modifyMember),
-            contentType : "application/json;charset=utf-8",
-            beforeSend : function(xhr) {
-                xhr.setRequestHeader(header, token);
-            },
-            success : function(result, status, xhr) {
-                alert('성공')
-            	if(callback){
-                    callback(result);
-                }  
-            }
-        });
-    }	
-	return {
-		update : update,
-		myPageDetail : myPageDetail
-	};
-})();
+	}); */
+});
 </script>
-

@@ -5,16 +5,16 @@
 
 <input type="hidden" name="page" class="page" value="${cri.page}">
 <div class="container">
-	<sec:authorze access="isAuthenticated()">
+	<%-- <sec:authorze access="isAuthenticated()">
 		<sec:authentication property="principal.memberVO.memberEmail" var="sesdddd"/>
 		<sec:authentication property="principal.memberVO.memberEmail"/>
 		${sesdddd }
-	</sec:authorize>
-	<div class="jumbotron">
-		<h1>게시판</h1>
+	</sec:authorize> --%>
+	<div class="jumbotron-white mt-5">
+		<h1 class="text-left">게시판</h1>
 	</div>
 
-	<p class="text-center"><a href="${contextPath}/board/list">전체</a></p>
+	<p class="text-center mt-2"><a href="${contextPath}/board/list">전체</a></p>
 	  <ul class="nav justify-content-center">
 	    <c:forEach items="${cateList}" var="c">
 	    	<li class="nav-item ${cid==c.cid ? 'list-group-item-primary' : ''}">
@@ -51,7 +51,7 @@
 					</form>	
 				</div>
 				
-			<table class="table">
+			<table class="table mt-3">
 				<tr>
 					<th>번호</th>
 					<th>분류</th>

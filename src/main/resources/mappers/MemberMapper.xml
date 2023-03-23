@@ -44,13 +44,14 @@
 	</select>
 	
 	<!-- 마이페이지 회원정보 수정 -->
-	<update id="update">
+	<update id="userInfoModify">
 		update member_tbl
-		 set 
-		 memberName=#{memberName}, 
-		 memberEmail=#{memberEmail}, 
-		 memberAddress=#{memberAddress}, 
-		 memberPhone=#{memberPhone} where mno=#{mno}
+		set
+			memberName = #{memberName},
+			memberEmail = #{memberEmail},
+			memberAddress = #{memberAddress},
+			memberPhone = #{memberPhone}
+		where mno = #{mno}
 	</update>
 	
 </mapper>

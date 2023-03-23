@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jafa.domain.Category;
+import com.jafa.domain.MemberType;
 import com.jafa.domain.ProductCategory;
 import com.jafa.domain.ProductCriteria;
 import com.jafa.domain.ProductPagination;
@@ -66,6 +67,7 @@ public class ProductController {
 		model.addAttribute("b", repository.detail(product_Bno));
 		ProductVO attachList = repository.detail(product_Bno);
 		model.addAttribute("attachList", attachList);
+		model.addAttribute("mType", MemberType.values());
 		return "product/detail";
 	}
 
@@ -161,7 +163,7 @@ public class ProductController {
 		}
 		return "redirect:/product/list";
 	}
-
+	
 	public void uploadPath(ProductVO vo, MultipartFile multipartFile) {
 		String fileName = multipartFile.getOriginalFilename(); 
 		

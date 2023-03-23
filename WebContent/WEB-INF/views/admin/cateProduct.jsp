@@ -4,11 +4,11 @@
 <%@ include file="../layout/header.jsp" %>
 
 <div class="container">
-	<div class="jumbotron ">
-		<h1>상품 카테고리 생성(관리자)</h1>
+	<div class="my-5">
+		<h1>상품 카테고리 생성(관리자)</h1><hr>
 	</div>
 	<div class="row">
-		<div class="col-6">
+		<div class="col-6 mt-3">
 			<h3>상품 카테고리 분류</h3>
 			<table class="table">
 				<tr>
@@ -29,7 +29,7 @@
 				</c:forEach>
 			</table>
 		</div>
-		<div class="col-6">
+		<div class="col-6 mt-3">
 			<h3>상품카테고리 추가</h3>
 			<form action="${contextPath}/admin/addProductCate?${_csrf.parameterName}=${_csrf.token}" method="post">
 				<table class="table">

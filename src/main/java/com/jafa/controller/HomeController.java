@@ -25,11 +25,16 @@ public class HomeController {
 	ProductRepository productRepository;
 	
 	@GetMapping("/")
-	public String home(Model model) {
+	public String home(Model model, @ModelAttribute("cri") ProductCriteria productCriteria, @PathVariable(required = false) String cateId, ProductCategory productCategory) {
 		model.addAttribute("welcome", "Laduree");
 		model.addAttribute("productCateList",productRepository.getProductCateList());
 		model.addAttribute("cateList",boardRepository.getCateList());
+		productCriteria.setProductCategory(productCategory);
+		model.addAttribute("list", productRepository.list(productCriteria))
+			.addAttribute("p", new  ProductPagination(productCriteria, productRepository.getTotalCount(productCriteria)));
 		return "index";
 	}
+	
+	
 	
 }

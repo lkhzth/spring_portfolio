@@ -39,7 +39,7 @@
             <div class="card my-3">
                 <div class="card-header">상세정보</div>
                 <div class="card-body">
-                    <div class7="">
+                    <div class="">
                         <table class="table" style="margin-bottom : -20px; font-size: 15px;">
                         	<tr><td>배송비 : 무료</td></tr>
                             <tr><td>전국 냉동탑차 직접배송</td></tr>
@@ -62,7 +62,7 @@
 							<a href="${contextPath}/member/myPage"><button class="btn btn-white px-5" style="border : 1px solid blue;">주문내역</button></a>
 						</c:when>
 						<c:when test="${loginIdNow.authList[0].memberType eq mType[2] || loginIdNow.authList[0].memberType eq mType[3]}">
-							<button name="order" class="btn btn-primary px-5 buyBtn">주문하기</button>
+							<%-- <a href="${contextPath}/product/payment"> --%><button class="btn btn-primary px-5 buyBtn">주문하기</button><!-- </a> -->
 							<a href="${contextPath}/member/myPage"><button class="btn btn-white px-5" style="border : 1px solid blue;">주문내역</button></a>
 						</c:when>
 						<c:otherwise>
@@ -99,16 +99,5 @@ $(function() {
 			.appendTo('body')
 			.submit();
 	})
-	
-	$('.buyBtn').on('click', function() {
-
-		$('<form/>').attr('method','get')
-			.attr('action','${contextPath}/product/order')
-			.append('<input type="hidden" value="${b.product_Bno}" name="product_Bno">')
-			.appendTo('body')
-			.submit();
-	});
-	
-	
 });
 </script>

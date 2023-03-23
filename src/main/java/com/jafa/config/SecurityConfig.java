@@ -67,13 +67,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// 한글 처리
-//		http.authorizeRequests()
-//		.antMatchers("/member/all").access("permitAll")
-//		.antMatchers("/member/mypage")
-//			.access("hasAnyRole('ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
-//		.antMatchers("/member/admin")
-//			.access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')");
-        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+		http.authorizeRequests()
+		.antMatchers("/member/myPage").access("hasAnyRole('ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		.antMatchers("/member/myPageDetail").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		.antMatchers("/member/admin")
+			.access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')");
+
+		CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);

@@ -1,14 +1,12 @@
 package com.jafa.controller;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,23 +15,22 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jafa.domain.AuthListDTO;
 import com.jafa.domain.AuthVO;
+import com.jafa.domain.BoardVO;
 import com.jafa.domain.Category;
 import com.jafa.domain.MemberDTO;
 import com.jafa.domain.MemberDetail;
 import com.jafa.domain.MemberType;
 import com.jafa.domain.MemberVO;
 import com.jafa.domain.ProductCategory;
+import com.jafa.domain.BoardVO.FileType;
 import com.jafa.repository.BoardRepository;
 import com.jafa.repository.MemberRepository;
 import com.jafa.repository.ProductRepository;
@@ -84,59 +81,62 @@ public class MemberController {
 		return "/member/login";
 	}
 	
-	@GetMapping("/myPage")
-	@PreAuthorize("isAuthenticated()")
-	public String myPage(Authentication auth, Model model) {
-		// 회원페이지
-		MemberDetail principal = (MemberDetail) auth.getPrincipal();
-		MemberVO memberVO = principal.getMemberVO();
-		log.info(memberVO);
-		model.addAttribute("memberInfo", memberVO);
-		
-		// 관리자가 보여지는 회원페이지
-		List<MemberVO> memberList = memberService.memberList();
-		model.addAttribute("list", memberList);
-		model.addAttribute("mType", MemberType.values());
-		return "/member/myPage";
-	}
+//	@GetMapping("/myPage")
+//	@PreAuthorize("isAuthenticated()")
+//	public String myPage(Authentication auth, Model model) {
+//		// 회원페이지
+//		MemberDetail principal = (MemberDetail) auth.getPrincipal();
+//		MemberVO memberVO = principal.getMemberVO();
+//		log.info(memberVO);
+//		model.addAttribute("memberInfo", memberVO);
+//		
+//		// 관리자가 보여지는 회원페이지
+//		List<MemberVO> memberList = memberService.memberList();
+//		model.addAttribute("list", memberList);
+//		model.addAttribute("mType", MemberType.values());
+//		return "/member/myPage";
+//	}
 	
 	@PreAuthorize("isAuthenticated()")
-	@RequestMapping("/myPage2")
-	public String myPage2(@AuthenticationPrincipal MemberDetail memberDetail, Model model) {
+	@RequestMapping("/myPage")
+	public String myPage(@AuthenticationPrincipal MemberDetail memberDetail, Model model) {
 		MemberVO memberVO = memberDetail.getMemberVO();
 		List<AuthVO> authList = memberVO.getAuthList();
 		List<MemberType> memberTypes = 
 				authList.stream()
 						.map(AuthVO::getMemberType)
 						.collect(Collectors.toList());
-		
 		authList.stream()
 		.map(AuthVO::getMemberType);
+		
+		// 현재 로그인된 아이디 정보리스트
+		model.addAttribute("memberVO", memberVO);
+		// 전체 등급리스트[?] 배열
+		model.addAttribute("mType", MemberType.values());
+		// 관리자일때 보여질페이지
 		if(memberTypes.contains(MemberType.ROLE_ADMIN)) {
-			System.out.println("관리자다");
+			List<MemberVO> memberList = memberService.memberList();
+			model.addAttribute("list", memberList);
 		} else  {
 			System.out.println("관리자 아님");
 		}
-		return "/member/myPage2";
+		return "/member/myPage";
 	}
 	
-	@GetMapping(value="/{mno}",	produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<MemberVO> myPageDetail(@PathVariable("mno") Long mno) {
-		return new ResponseEntity<>(
-				memberRepository.myPageDetail(mno), HttpStatus.OK);
+	// 마이페이지상세(수정폼)
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/myPageDetail")
+	public String myPageDetail(Model model, Long mno) {
+		model.addAttribute("bb", memberRepository.myPageDetail(mno));
+		return "member/myPageDetail";
 	}
 	
-	@RequestMapping(method= {RequestMethod.PUT, RequestMethod.PATCH}, value="/{mno}",
-			consumes = "application/json",
-			produces = {MediaType.TEXT_PLAIN_VALUE})
-	public ResponseEntity<String> modify(
-			@RequestBody MemberVO vo,
-			@PathVariable("mno") Long mno){
-		vo.setMno(mno);
-		MemberVO myPageDetail = memberRepository.myPageDetail(mno);
-		System.out.println("mno:  " + mno);
-		return memberRepository.update(myPageDetail) == 1 ? new ResponseEntity<>("success", HttpStatus.OK)
-						: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	// 마이페이지상세수정처리
+	@PostMapping("/modify")
+	public String userInfoModify(MemberVO vo, RedirectAttributes rttr) {
+		memberRepository.userInfoModify(vo);
+		rttr.addFlashAttribute("modResult", "수정완료");
+		return "redirect:/member/myPageDetail?mno="+vo.getMno();
 	}
 	
 	// 관리자 페이지에서 회원목록 조회 
@@ -179,7 +179,7 @@ public class MemberController {
 		rttr.addFlashAttribute("message", "회원가입성공");
 		return "redirect:/";
 	}
-
+	
 	// 회원등급 변경 처리
 	@PostMapping("/updateMemberType")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")

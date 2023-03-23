@@ -19,7 +19,7 @@ public interface MemberRepository {
 	MemberVO myPageDetail(Long mno);
 
 	// 마이페이지 회원정보 수정
-	public int update(MemberVO memberVO);
+	void userInfoModify(MemberVO vo);
 
 	
 	

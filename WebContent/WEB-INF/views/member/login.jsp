@@ -3,252 +3,58 @@
 
 <%@ include file="../layout/header.jsp" %>
 
-	<!-- <div class="wrapper">
-	  <div class="container1">
-	    <div class="sign-up-container">
-	      <form>
-	        <h1>Create Account</h1>
-	        <div class="social-links">
-	          <div>
-	            <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-	          </div>
-	          <div>
-	            <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-	          </div>
-	          <div>
-	            <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-	          </div>
-	        </div>
-	        <span>or use your email for registration</span>
-	        <input type="text" placeholder="Name">
-	        <input type="email" placeholder="Email">
-	        <input type="password" placeholder="Password">
-	      </form>
-	        <button class="form_btn">회원가입</button>
-	    </div> -->
-	    
-	    <div class="sign-in-container">
-	      <form  action="${contextPath}/member/login" method="post">
-	        <h1>로그인</h1>
-	        <div class="social-links">
-	          <div>
-	            <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-	          </div>
-	          <div>
-	            <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-	          </div>
-	          <div>
-	            <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-	          </div>
-	        </div>
-	        <span>or use your account</span>
-	        <input type="text" placeholder="ID" name="loginId" value="${loginId}">
-	        <input type="text" placeholder="PASSWORD" name=loginPwd>
-	        <c:if test="${not empty errorMessage }">
-				<div class="alert alert-danger">
-					<strong>${errorMessage}</strong>
-				</div>
-			</c:if>
-	        로그인상태 유지 : <input type="checkbox" name="remember-me"><br>
-	        <button class="form_btn">로그인</button>
-	        <!-- csrf 토큰 -->
-		 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-	      </form>
-	    </div>
-	    
-	    <div class="overlay-container">
-	      <div class="overlay-right">
-	        <h1>회원가입</h1>
-	        <p>비회원이신분은 여기를 눌러주세요.</p>
-	        <button id="signUp" class="overlay_btn">
-	        	<a class="joinText" href="${contextPath}/member/join">회원가입</a>
-	        </button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+<section class="vh-100" style="background-color: ;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card" style="border-radius: 1rem; box-shadow: 10px 5px 5px black;">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img src="https://cdn.pixabay.com/photo/2022/04/02/14/39/macarons-7107136_960_720.jpg"
+                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
 
-<style>
-	@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css");
-	
-	* {
-	  box-sizing: border-box;
-	}
-	body {
-	  font-family: "Montserrat", sans-serif;
-	  margin: 0;
-	  padding: 0;
-	}
-	.wrapper {
-	  width: 100%;
-	  height: 100vh;
-	  display: flex;
-	  justify-content: center;
-	  align-items: center;
-	  overflow: hidden;
-	}
-	.container1 {
-	  border-radius: 10px;
-	  box-shadow: -5px -5px 10px #fff, 5px 5px 10px #babebc;
-	  position: absolute;
-	  width: 768px;
-	  min-height: 480px;
-	  overflow: hidden;
-	}
-	form {
-	  background: #ebecf0;
-	  display: flex;
-	  flex-direction: column;
-	  padding: 0 50px;
-	  height: 100%;
-	  justify-content: center;
-	  align-items: center;
-	}
-	form input {
-	  background: #eee;
-	  padding: 16px;
-	  margin: 8px 0;
-	  width: 85%;
-	  border: 0;
-	  outline: none;
-	  border-radius: 20px;
-	  box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff;
-	}
-	button {
-	  border-radius: 20px;
-	  border: none;
-	  outline: none;
-	  font-size: 12px;
-	  font-weight: bold;
-	  padding: 15px 45px;
-	  margin: 14px;
-	  letter-spacing: 1px;
-	  text-transform: uppercase;
-	  cursor: pointer;
-	  transition: transform 80ms ease-in;
-	}
-	.form_btn {
-	  box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
-	}
-	.form_btn:active {
-	  box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
-	}
-	.overlay_btn {
-	  background-color: #bebebe;
-	  color: #fff;
-	  box-shadow: -5px -5px 10px , 5px 5px 8px;
-	}
-	.sign-in-container {
-	  position: absolute;
-	  left: 0;
-	  width: 50%;
-	  height: 100%;
-	  transition: all 0.5s;
-	  margin-top: 20px;
-	  margin-left: 30px;
-	  margin-right: 30px;
-	}
-	.overlay-container {
-	  margin-top: 20px;
-	  margin-left: 30px;
-	  margin-right: 30px;
-	}
-	.sign-up-container {
-	  position: absolute;
-	  left: 0;
-	  width: 50%;
-	  height: 100%;
-	  opacity: 0;
-	  transition: all 0.5s;
-	  margin-top: 20px;
-	  margin-left: 30px;
-	  margin-right: 30px;
-	}
-	.overlay-left {
-	  display: flex;
-	  flex-direction: column;
-	  padding: 0 50px;
-	  justify-content: center;
-	  align-items: center;
-	  position: absolute;
-	  right: 0;
-	  width: 50%;
-	  height: 100%;
-	  opacity: 0;
-	  background-color: #ff4b2b;
-	  color: #fff;
-	  transition: all 0.5s;
-	}
-	.overlay-right {
-	  display: flex;
-	  flex-direction: column;
-	  padding: 0 50px;
-	  justify-content: center;
-	  align-items: center;
-	  position: absolute;
-	  right: 0;
-	  width: 49%;
-	  height: 100%;
-	  background-color: #d2d2d2;
-	  transition: all 0.5s;
-	}
-	.container.right-panel-active .sign-in-container {
-	  transform: translateX(100%);
-	  opacity: 0;
-	}
-	.container.right-panel-active .sign-up-container {
-	  transform: translateX(100%);
-	  opacity: 1;
-	  z-index: 2;
-	}
-	.container.right-panel-active .overlay-right {
-	  transform: translateX(-100%);
-	  opacity: 0;
-	}
-	.container.right-panel-active .overlay-left {
-	  transform: translateX(-100%);
-	  opacity: 1;
-	  z-index: 2;
-	}
-	.social-links {
-	  margin: 20px 0;
-	}
-	form h1 {
-	  font-weight: bold;
-	  margin: 0;
-	  color: #000;
-	}
-	
-	p {
-	  font-size: 16px;
-	  font-weight: bold;
-	  letter-spacing: 0.5px;
-	  margin: 20px 0 30px;
-	}
-	span {
-	  font-size: 12px;
-	  color: #000;
-	  letter-spacing: 0.5px;
-	  margin-bottom: 10px;
-	}
-	.social-links div {
-	  width: 40px;
-	  height: 40px;
-	  display: inline-flex;
-	  justify-content: center;
-	  align-items: center;
-	  margin: 0 5px;
-	  border-radius: 50%;
-	  box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
-	  cursor: pointer;
-	}
-	.social-links a {
-	  color: #000;
-	}
-	.social-links div:active {
-	  box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
-}
-</style>
+                <form action="${contextPath}/member/login" method="post">
+
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                    <span class="h1 fw-bold mb-0">로그인</span>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="text" id="loginId" placeholder="ID" name="loginId" value="${loginId}" class="form-control form-control-lg"/>
+                    <label class="form-label" for="loginId">ID를 입력하세요</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="text" id="loginPwd" placeholder="PASSWORD" name=loginPwd class="form-control form-control-lg" />
+                    <label class="form-label" for="loginPwd">Password를 입력하세요</label>
+                  </div>
+				<c:if test="${not empty errorMessage }">
+					<div class="alert alert-danger">
+						<strong>${errorMessage}</strong>
+					</div>
+				</c:if>
+                  <div class="pt-1 mb-4">
+                    <button class="btn btn-dark btn-lg btn-block">Login</button>
+					<!-- csrf 토큰 -->
+		 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                  </div>
+                  <p class="mb-5 pb-lg-2" style="color: #393f81;">ID가 없으신가요? 
+                  	<a href="${contextPath}/member/join" style="color: blue; font-weight: bold">회원가입</a>
+                  </p>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <%@ include file="../layout/footer.jsp" %>
 

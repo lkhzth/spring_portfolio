@@ -34,6 +34,4 @@ public interface ProductRepository {
 
 	// 페이징처리
 	int getTotalCount(ProductCriteria productCriteria);
-	
-	
 }

@@ -24,6 +24,8 @@
 
 <style>
 	.lh{vertical-align: center}
+	.rp {position: absolute; right: 0}
+	.lp {position: absolute; left: 150px}
 </style>
 
 <!-- 슬라이더 -->
@@ -31,7 +33,6 @@
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 
-<link rel="stylesheet" href="${contextPath}/resources/css/style.css">
 <script>const contextPath = '${contextPath}'</script>
 
 <script src="${contextPath}/resources/js/main.js"></script>
@@ -55,8 +56,14 @@ console.log(memberType)
 
 </head>
 <body>
-	<div class="container">
-		<nav class="navbar navbar-expand-sm navbar-light">
+	<div class="lp">
+		<a href="${contextPath}">
+			<h1 style="font-weight: bold; font-family: fantasy;">La Durée</h1>
+			<h5 style="font-weight: bold; font-size: 15px; font-family: fantasy;">(주)&nbsp;&nbsp;라뒤르</h5>
+		</a>
+	</div>
+	<div class="" style="padding: 0 20%">
+		<nav class="navbar navbar-expand-sm navbar-light mb-3">
 		  <ul class="navbar-nav">
 		    <li class="nav-item active">
 		      <a class="nav-link" href="${contextPath}">Home</a>
@@ -79,6 +86,7 @@ console.log(memberType)
 				</c:forEach>
 		      </div>
 		    </li>
+			
 
 		    <li class="nav-item rp">
 		    	<div class="d-flex justify-content-between">

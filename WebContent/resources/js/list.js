@@ -17,6 +17,7 @@ $(function() {
 	// 페이지 이동
 	$('.pagination a').on('click', function(e) {
 		e.preventDefault();
+		
 		let pageForm = $('<form>');
 		pageForm.empty();
 		pageForm.attr({

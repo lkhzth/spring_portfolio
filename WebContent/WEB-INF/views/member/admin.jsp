@@ -4,7 +4,7 @@
 <%@ include file="../layout/header.jsp" %>
 
 <div class="container">
-	<div class="jumbotron bg-warning">
+	<div class="my-5">
 		<h1>관리자페이지</h1>
 	</div>
 	<form action="${contextPath}/member/updateMemberType?${_csrf.parameterName}=${_csrf.token}" method="post">

@@ -7,15 +7,18 @@
 
 <input type="hidden" name="page" class="page" value="${cri.page}">
 <div class="container-xxl mx-5">
-	
-	<p class="text-center"><a href="${contextPath}/product/list">전체</a></p>
-	  <ul class="nav justify-content-center">
-	    <c:forEach items="${productCateList}" var="c">
-	    	<li style="border-radius:15px; border:2px solid #d8d8d7" class="nav-item ${cateId==c.cateId ? 'list-group-item-primary' : ''}">
-			  	<a class="nav-link mx-4" href="${contextPath}/product/list/${c.cateId}">${c.cateName}</a>
-		  	</li>
-		</c:forEach>
-	  </ul>
+	<ul class="nav justify-content-center mt-3">
+		<li class="text-center mt-4 nav-item "style="border-radius:15px; border:2px solid #d8d8d7">
+			<a href="${contextPath}/product/list" class="nav-link mx-4">전체</a>
+		</li>
+	</ul> 
+	<ul class="nav justify-content-center mt-1">
+	  <c:forEach items="${productCateList}" var="c">
+	  	<li style="border-radius:15px; border:2px solid #d8d8d7" class="nav-item ${cateId==c.cateId ? 'list-group-item-primary' : ''}">
+	  		<a class="nav-link mx-4" href="${contextPath}/product/list/${c.cateId}">${c.cateName}</a>
+	 	</li>
+	  </c:forEach>
+	</ul>
 
 	<div class="row">
 		<div class="col-12">

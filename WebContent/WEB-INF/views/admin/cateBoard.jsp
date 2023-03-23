@@ -4,11 +4,11 @@
 <%@ include file="../layout/header.jsp" %>
 
 <div class="container">
-	<div class="jumbotron ">
-		<h1>게시판생성페이지(관리자)</h1>
+	<div class="my-5">
+		<h1>게시판생성페이지(관리자)</h1><hr>
 	</div>
 	<div class="row">
-		<div class="col-6">
+		<div class="col-6 mt-3">
 			<h3>게시판 현황</h3>
 			<table class="table">
 				<tr>
@@ -24,7 +24,7 @@
 				</c:forEach>
 			</table>
 		</div>
-		<div class="col-6">
+		<div class="col-6 mt-3">
 			<h3>게시판 추가</h3>
 			<form action="${contextPath}/admin/addCate?${_csrf.parameterName}=${_csrf.token}" method="post">
 				<table class="table">

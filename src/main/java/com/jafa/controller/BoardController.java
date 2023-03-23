@@ -49,7 +49,6 @@ public class BoardController {
 		return productRepository.getProductCateList();
 	}
 	
-	
 	// 목록
 	@GetMapping(value = {"/list/{cid}", "/list"})
 	public String list(@ModelAttribute("cri") Criteria criteria,

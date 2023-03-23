@@ -1,5 +1,6 @@
 package com.jafa.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -11,7 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberVO {
+public class MemberVO implements Serializable{
+	
+	private static final long serialVersionUID = -6917382595316125763L;
+	
 	private Long mno;
 	private String memberId;
 	private String password;
