@@ -66,13 +66,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// 한글 처리
+		// URL 접근 보안의 시작
 		http.authorizeRequests()
-		.antMatchers("/member/myPage").access("hasAnyRole('ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		.antMatchers("/member/myPage").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
 		.antMatchers("/member/myPageDetail").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
-		.antMatchers("/member/admin")
-			.access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')");
+		.antMatchers("/member/admin").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
+		// 상품접근
+		.antMatchers("/product/detail*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		.antMatchers("/product/write").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
+		.antMatchers("/product/modify*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
+		.antMatchers("/product/delete*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
+		// 게시판접근
+		.antMatchers("/board/detail*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		.antMatchers("/board/write").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		.antMatchers("/board/modify*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		.antMatchers("/board/delete*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		;
 
+		// 한글 처리
 		CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);

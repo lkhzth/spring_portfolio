@@ -67,11 +67,7 @@
 							${b.category.cname}
 							<input type="hidden" class="cateName" value="${b.category.cname}">
 						</td>
-						<td>
-							<sec:authorize access="isAuthenticated()">
-								<a href="${b.bno}" class="goDetail">${b.title}</a>
-							</sec:authorize>
-						</td>
+						<td><a href="${b.bno}" class="goDetail">${b.title}</a></td>
 						<td>${b.fileName}</td>
 						<td>${b.writer}</td>
 						<td>${b.writeDate}</td>

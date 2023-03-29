@@ -1,6 +1,5 @@
 package com.jafa.controller;
 
-import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,19 +17,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jafa.domain.AuthListDTO;
 import com.jafa.domain.AuthVO;
-import com.jafa.domain.BoardVO;
 import com.jafa.domain.Category;
 import com.jafa.domain.MemberDTO;
 import com.jafa.domain.MemberDetail;
 import com.jafa.domain.MemberType;
 import com.jafa.domain.MemberVO;
 import com.jafa.domain.ProductCategory;
-import com.jafa.domain.BoardVO.FileType;
 import com.jafa.repository.BoardRepository;
 import com.jafa.repository.MemberRepository;
 import com.jafa.repository.ProductRepository;
@@ -42,7 +38,7 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @Log4j
 public class MemberController {
-	
+
 	@Autowired
 	MemberService memberService;
 	
@@ -126,9 +122,18 @@ public class MemberController {
 	// 마이페이지상세(수정폼)
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/myPageDetail")
-	public String myPageDetail(Model model, Long mno) {
-		model.addAttribute("bb", memberRepository.myPageDetail(mno));
-		return "member/myPageDetail";
+	public String myPageDetail(Model model, @AuthenticationPrincipal MemberDetail memberDetail, @RequestParam Long mno) {
+		MemberVO memberVO = memberDetail.getMemberVO();
+		List<AuthVO> authList = memberVO.getAuthList();
+		List<MemberType> memberTypes = authList.stream()
+				    .map(AuthVO::getMemberType)
+				    .collect(Collectors.toList());
+		if (memberTypes.contains(MemberType.ROLE_ADMIN) || memberVO.getMno().equals(mno)) {  // 보고서에 적을것 관리자일때 회원일때 쿼리스트링mno 권한
+		    	model.addAttribute("bb", memberRepository.myPageDetail(mno));
+		    return "member/myPageDetail";
+		} else {
+			return "redirect:/member/myPage";
+		}
 	}
 	
 	// 마이페이지상세수정처리

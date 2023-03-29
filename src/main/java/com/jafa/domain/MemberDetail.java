@@ -27,4 +27,8 @@ public class MemberDetail extends User {
 			.collect(Collectors.toList()));
 		this.memberVO = vo;
 	}
+
+	public Long getMno() {
+		return memberVO.getMno();
+	}
 }

@@ -5,6 +5,10 @@
 
 <%-- <sec:authentication property="principal.username"/> --%>
 
+${mType[0]}<br>
+
+${authList[0].memberType}
+
 <div class="container">
 	<div class="jumbotron">
 		<h2>게시물상세</h2> 
@@ -25,10 +29,10 @@
 			${b.content}
 		</div>
 		<div class="card-footer">
-			<sec:authorize access="isAuthenticated()"> <!-- 권한이 있는 경우(로그인한 사용자) -->
+			<c:if test="${loginIdNow eq b.writer || authList[0].memberType eq mType[0]}">
 				<button class="btn btn-warning modBoard">수정하기</button>
 				<button class="btn btn-danger delBoard">삭제하기</button>
-			</sec:authorize>
+			</c:if>
 			<a href="${contextPath}/board/list"><button class="btn btn-info">목록으로</button></a>
 		</div>
 	</div>	
@@ -104,7 +108,7 @@
 						<label>댓글</label><input class="form-control" name="reply" value="새 댓글">
 					</div>
 					<div class="form-group">
-						<label>작성자</label><input class="form-control" name="writer" value="writer">
+						<label>작성자</label><input class="form-control" name="writer" value="${loginIdNow}" readonly="readonly">
 					</div>
 					<div class="form-group">
 						<label>댓글작성일</label><input class="form-control" name="replyDate" value="">
@@ -162,9 +166,14 @@ $(function() {
 		// 덧글 입력 모달창 보이기
 		$("#addReplyBtn").on("click", function(e){
 			// 덧글 쓰기 버튼을 클릭한다면,
-					
-			modal.find("input").val("");
-			modal.find("input").removeAttr("readonly");
+			if($("input[name=writer]").prop("readonly")){
+//				modal.find("input").removeAttr("readonly");
+//				modal.find("input").val("");
+				modal.find("input[name=reply]").val("");
+				modal.find("input[name=writer]").val();
+			} else {
+				modal.find("input[name=reply]").val("");
+			}
 			// 모달의 모든 입력창을 초기화
 			modalInputReplyDate.closest("div").hide();
 			// closest : 선택 요소와 가장 가까운 요소를 지정.

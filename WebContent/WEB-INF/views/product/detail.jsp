@@ -62,6 +62,7 @@
 							<a href="${contextPath}/member/myPage"><button class="btn btn-white px-5" style="border : 1px solid blue;">주문내역</button></a>
 						</c:when>
 						<c:when test="${loginIdNow.authList[0].memberType eq mType[2] || loginIdNow.authList[0].memberType eq mType[3]}">
+							
 							<button name="order" class="btn btn-primary px-5 buyBtn">주문하기</button>
 							<a href="${contextPath}/member/myPage"><button class="btn btn-white px-5" style="border : 1px solid blue;">주문내역</button></a>
 						</c:when>
@@ -72,6 +73,23 @@
 					</c:choose>
 				</div>
             </div>
+            
+            <div class="line"></div>
+			<div class="button">
+				<div class="button_quantity">
+					주문수량
+					<input type="text" class="quantity_input" value="1">
+					<span>
+						<button class="plus_btn">+</button>
+						<button class="minus_btn">-</button>
+					</span>
+				</div>
+				<div class="button_set">
+					<a class="btn_cart">장바구니담기</a>
+					<a class="btn_buy">바로구매</a>
+				</div>
+			</div>
+            
         </div>
     </div>
 </div>
@@ -100,14 +118,68 @@ $(function() {
 			.submit();
 	})
 	
-	$('.buyBtn').on('click', function() {
+	// 수량 버튼 조작
+	let quantity = $(".quantity_input").val();
+	$(".plus_btn").on("click", function(){
+		$(".quantity_input").val(++quantity);
+	});
+	$(".minus_btn").on("click", function(){
+		if(quantity > 1){
+			$(".quantity_input").val(--quantity);	
+		}
+	});
 
+	// 서버로 전송할 데이터
+	const form = {
+			memberId : '${loginIdNow.memberId}',
+			product_Bno : '${b.product_Bno}',
+			product_Count : ''
+	}	
+	
+	// 장바구니 추가 버튼
+	$(".btn_cart").on("click", function(e){
+		
+		console.log(form);
+		const token = $("[name='_csrf']").val()
+		const header = $("[name='_csrf_header']").val()
+		form.product_Count = $(".quantity_input").val();
+
+		$.ajax({
+			url: `${contextPath}/cart/add`,
+			type: 'POST',
+			data: form,
+			beforeSend : function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+			success: function(result){
+				cartAlert(result);
+			}
+		})
+	});
+	
+	function cartAlert(result){
+		if(result == '0'){
+			alert("장바구니에 추가를 하지 못하였습니다.");
+		} else if(result == '1'){
+			alert("장바구니에 추가되었습니다.");
+		} else if(result == '2'){
+			alert("장바구니에 이미 추가되어져 있습니다.");
+		} else if(result == '5'){
+			alert("로그인이 필요합니다.");	
+		}
+	}
+	
+	
+	
+	/* $('.buyBtn').on('click', function() {
 		$('<form/>').attr('method','get')
 			.attr('action','${contextPath}/product/order')
 			.append('<input type="hidden" value="${b.product_Bno}" name="product_Bno">')
 			.appendTo('body')
 			.submit();
-	});
+	}); */
+
+	
 	
 	
 });

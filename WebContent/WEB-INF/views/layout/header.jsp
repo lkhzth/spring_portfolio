@@ -40,8 +40,8 @@
 <script src="${contextPath}/resources/js/detail.js"></script>
 <script src="${contextPath}/resources/js/reply.js"></script>
 
-<%-- <sec:authorize access="isAuthenticated()">
-	<sec:authentication property="principal.username"/>
+<sec:authorize access="isAuthenticated()">
+	<sec:authentication property="principal.username" var="loginIdNow"/>
 	<sec:authentication property="principal.memberVO.authList" var="authList"/>
 	<script>
 	let memberType = [];
@@ -50,16 +50,13 @@
 	</c:forEach>
 	</script>
 </sec:authorize>
-<script>
-console.log(memberType)
-</script> --%>
 
 </head>
 <body>
 	<div class="lp">
 		<a href="${contextPath}">
-			<h1 style="font-weight: bold; font-family: fantasy;">La Durée</h1>
-			<h5 style="font-weight: bold; font-size: 15px; font-family: fantasy;">(주)&nbsp;&nbsp;라뒤르</h5>
+			<h1 style="font-weight: bold; font-family: fantasy;" class="logo">La Durée</h1>
+			<h5 style="font-weight: bold; font-size: 15px; font-family: fantasy;" class="logo">(주)&nbsp;&nbsp;라뒤르</h5>
 		</a>
 	</div>
 	<div class="" style="padding: 0 20%">

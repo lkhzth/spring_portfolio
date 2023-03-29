@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jafa.repository.CartRepository">
+  
+  	<!-- 카트 목록 -->
+	<select id="getCart" resultType="cartDTO">
+		select a.cartId, a.memberId, a.product_bno, a.product_Count, b.PRODUCT_NAME, b.PRODUCT_PRICE
+		from cart_tbl a left outer join PRODUCT_TBL b on a.product_bno = b.product_bno
+		where memberId = #{memberId}	
+	</select>
+	
+	<!-- 카트 확인 -->
+	<select id="checkCart" resultType="cartDTO">
+		select * from cart_tbl 
+		where memberId = #{memberId} and product_bno = #{product_bno}
+	</select>
+  
+	<!-- 카트 추가 -->
+	<insert id="addCart">
+		insert into cart_tbl(memberId, product_bno, product_Count)
+		values(#{memberId}, #{product_bno}, #{product_Count}) 
+	</insert>
+	
+	<!-- 카트 수량 수정 -->
+	<update id="modifyCount">
+		update cart_tbl set product_Count=#{product_Count} where cartId = #{cartId}
+	</update>
+	
+	<!-- 카트 삭제 -->
+	<delete id="deleteCart">
+		delete from cart_tbl where cartId = #{cartId}
+	</delete>
+	
+</mapper>

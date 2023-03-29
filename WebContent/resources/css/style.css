@@ -57,7 +57,7 @@ hr.layout {
     display: none;
 }
 
-a {
+.logo {
     text-decoration: none;
     color: #000;
 }

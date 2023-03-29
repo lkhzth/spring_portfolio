@@ -66,8 +66,6 @@
 				    </c:forEach>
 				</div>
 			
-			
-			
 			<div class="d-flex justify-content-center">
 				<ul class="pagination text-center">
 					<c:if test="${p.prev}">

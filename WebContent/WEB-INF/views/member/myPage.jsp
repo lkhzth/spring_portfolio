@@ -79,7 +79,7 @@
 						<td>${memberVO.enabled}</td>
 						<td>${memberVO.authList[0].memberType}</td>
 						<td>
-							<button name="mno" class="btn btn-warning userMod">정보수정</button>
+							<button name="mno" class="btn btn-warning userMod" data-mno="${memberVO.mno}">정보수정</button>
 						</td>
 					</tr>	
 				</c:otherwise>
@@ -109,6 +109,7 @@
 
 <script>
 $(function(){
+	
 	$('.adminMod').on('click', function() {
 		let mno = $(this).data('mno');
 		$('<form/>').attr('method','get')
@@ -119,25 +120,12 @@ $(function(){
 	});
 	
 	$('.userMod').on('click', function() {
-
 		$('<form/>').attr('method','get')
 			.attr('action','${contextPath}/member/myPageDetail')
 			.append('<input type="hidden" value="${memberVO.mno}" name="mno">')
 			.appendTo('body')
 			.submit();
-	});
-	
-	// 회원정보수정 페이지 구현
-	/* let count = 0;
-	$('.modify').on('click',function(e){
-		$(this).closest('tr').find('input').attr('disabled',false);
-		let inputNameAttr = $(this).closest('tr').find('input').attr('name');
-		let test = inputNameAttr.replace("order",count);
-		$(this).closest('tr').find('input').attr('name', test);
-		console.log(test);
-		var mno =$(this).closest('tr').find("[name='mno']").val();
-		count++;
-		
-	}); */
+	}); 
 });
+
 </script>

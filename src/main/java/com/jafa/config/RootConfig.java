@@ -18,6 +18,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.jafa.domain.BoardVO;
+import com.jafa.domain.CartDTO;
 import com.jafa.domain.Category;
 import com.jafa.domain.MemberVO;
 import com.jafa.domain.ProductCategory;
@@ -54,7 +55,7 @@ public class RootConfig {
 		factory.setDataSource(dataSource());
 		factory.setMapperLocations(new PathMatchingResourcePatternResolver()
 				.getResources("classpath:mappers/**/*Mapper.xml"));
-		factory.setTypeAliases(BoardVO.class, Category.class, ReplyVO.class, MemberVO.class, ProductVO.class, ProductCategory.class);
+		factory.setTypeAliases(BoardVO.class, Category.class, ReplyVO.class, MemberVO.class, ProductVO.class, ProductCategory.class, CartDTO.class);
 		return factory;
 	}
 

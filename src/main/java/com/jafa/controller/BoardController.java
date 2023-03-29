@@ -3,8 +3,11 @@ package com.jafa.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jafa.domain.AuthVO;
 import com.jafa.domain.BoardVO;
 import com.jafa.domain.BoardVO.FileType;
 import com.jafa.domain.Category;
 import com.jafa.domain.Criteria;
+import com.jafa.domain.MemberDetail;
+import com.jafa.domain.MemberType;
+import com.jafa.domain.MemberVO;
 import com.jafa.domain.Pagination;
 import com.jafa.domain.ProductCategory;
 import com.jafa.repository.BoardRepository;
@@ -66,6 +73,8 @@ public class BoardController {
 		model.addAttribute("b", repository.detail(bno));
 		BoardVO attachList = repository.detail(bno);
 		model.addAttribute("attachList", attachList);
+		model.addAttribute("mType", MemberType.values());
+		
 		return "board/detail";
 	}
 
@@ -100,27 +109,75 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+//	// 삭제
+//	@PostMapping("/remove")
+//	public String remove(Long bno) {
+//		BoardVO vo = repository.detail(bno);
+//		if (vo.getFileName() != null) { // 파일이 있으면
+//			File file = new File("c:/file_repository/" + bno, vo.getFileName());
+//			File folder = new File("c:/file_repository/" + bno);
+//			file.delete();
+//			folder.delete();
+//		} 
+//		repository.remove(bno);
+//		return "redirect:/board/list";
+//	}
+	
+	
 	// 삭제
 	@PostMapping("/remove")
-	public String remove(Long bno) {
-		BoardVO vo = repository.detail(bno);
-		if (vo.getFileName() != null) { // 파일이 있으면
-			File file = new File("c:/file_repository/" + bno, vo.getFileName());
-			File folder = new File("c:/file_repository/" + bno);
-			file.delete();
-			folder.delete();
-		} 
-		repository.remove(bno);
-		return "redirect:/board/list";
+	@PreAuthorize("isAuthenticated()")
+	public String remove(@AuthenticationPrincipal MemberDetail memberDetail, @RequestParam Long bno) {
+	    MemberVO memberVO = memberDetail.getMemberVO();
+	    List<AuthVO> authList = memberVO.getAuthList();
+	    List<MemberType> memberTypes = authList.stream()
+	            .map(AuthVO::getMemberType)
+	            .collect(Collectors.toList());
+	    BoardVO board = repository.detail(bno);
+	    if (memberTypes.contains(MemberType.ROLE_ADMIN) || memberVO.getMemberId().equals(board.getWriter())) {   // 로그인된 아이디와 boardVO의 작성자writer 비교
+	    	BoardVO vo = repository.detail(bno);
+			if (vo.getFileName() != null) { // 파일이 있으면
+				File file = new File("c:/file_repository/" + bno, vo.getFileName());
+				File folder = new File("c:/file_repository/" + bno);
+				file.delete();
+				folder.delete();
+			} 
+			repository.remove(bno);
+	        return "redirect:/board/list";
+	    } else {
+	        return "redirect:/board/detail?bno=" + bno;
+	    }
 	}
-
+	
 	// 수정폼
+//	@GetMapping("/modify")
+//	public void modifyForm(Long bno, Model model) {
+//		BoardVO vo = repository.detail(bno);
+//		model.addAttribute("b", vo);
+//	}
 	@GetMapping("/modify")
-	public void modifyForm(Long bno, Model model) {
-		BoardVO vo = repository.detail(bno);
-		model.addAttribute("b", vo);
+	@PreAuthorize("isAuthenticated()")
+	public String modifyForm(@AuthenticationPrincipal MemberDetail memberDetail, @RequestParam Long bno, Model model) {
+	    MemberVO memberVO = memberDetail.getMemberVO();
+	    List<AuthVO> authList = memberVO.getAuthList();
+	    List<MemberType> memberTypes = authList.stream()
+	            .map(AuthVO::getMemberType)
+	            .collect(Collectors.toList());
+	    
+	    BoardVO board = repository.detail(bno);
+	    if (board == null) {
+	        return "redirect:/board/list";
+	    }
+	    
+	    // 현재 사용자가 해당 게시물을 수정할 수 있는지 검사
+	    if (memberTypes.contains(MemberType.ROLE_ADMIN) || memberVO.getMemberId().equals(board.getWriter())) {
+	        model.addAttribute("b", board);
+	        return "board/modify";
+	    } else {
+	        return "redirect:/board/detail?bno=" + bno;
+	    }
 	}
-
+	
 	// 수정처리
 	@PostMapping("/modify")
 	public String modify(BoardVO vo, RedirectAttributes rttr,
