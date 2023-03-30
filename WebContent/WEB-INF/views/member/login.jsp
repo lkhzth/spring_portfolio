@@ -17,7 +17,6 @@
               <div class="card-body p-4 p-lg-5 text-black">
 
                 <form action="${contextPath}/member/login" method="post">
-
                   <div class="d-flex align-items-center mb-3 pb-1">
                     <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
                     <span class="h1 fw-bold mb-0">로그인</span>
@@ -38,6 +37,7 @@
 					</div>
 				</c:if>
                   <div class="pt-1 mb-4">
+                  	로그인상태유지 : <input type="checkbox" name="remember-me">
                     <button class="btn btn-dark btn-lg btn-block">Login</button>
 					<!-- csrf 토큰 -->
 		 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
@@ -46,7 +46,6 @@
                   	<a href="${contextPath}/member/join" style="color: blue; font-weight: bold">회원가입</a>
                   </p>
                 </form>
-
               </div>
             </div>
           </div>

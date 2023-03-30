@@ -104,7 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    	.logoutSuccessUrl("/");
         
         http.rememberMe()
-		.key("leekwanghyup") // 인증받은 사용자의 정보로 token을 생성하는데 사용되는 임의의 key값 설정 
+		.key("lee") // 인증받은 사용자의 정보로 token을 생성하는데 사용되는 임의의 key값 설정 
 		.tokenRepository(persistentTokenRepository())
 		.rememberMeParameter("remember-me") // 자동로그인 체크박스의 name속성 지정 : 기본값
 		.tokenValiditySeconds(86400); // token만료시간 설정

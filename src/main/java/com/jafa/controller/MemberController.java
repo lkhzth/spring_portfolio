@@ -76,6 +76,24 @@ public class MemberController {
 		}
 		return "/member/login";
 	}
+	/* 
+	 	시큐리티 적용된 로그인
+	  login.jsp에서 클라이언트가 요청한 id와 password값이 form으로 전달이 되었다고 쳤을때 action의 요청이 controller로 가는 요청이여도 정보는 securityConfig.class의 
+	  configure메서드 안 http.formLogin() 메서드로 바로 들어감
+	  Spring Security에서 formLogin() 메서드를 사용하여 로그인 폼을 구현한 경우, 로그인 폼에서 클라이언트가 전송한 아이디와 비밀번호는 
+	  UsernamePasswordAuthenticationFilter에서 가로채어짐. 이 필터는 로그인 폼에서 전송된 아이디와 비밀번호를 인증 처리하고, 인증이 성공하면 Authentication 객체를 생성하여 
+	  SecurityContext에 저장. 클라이언트가 로그인 폼에서 전송한 아이디와 비밀번호는 Authentication 객체에 저장되고, 이후 Spring Security에서 제공하는 
+	  SecurityContextHolder를 통해 접근
+	  즉, 클라이언트가 로그인 폼에서 전송한 아이디와 비밀번호는 Spring Security의 UsernamePasswordAuthenticationFilter에서 처리되어 인증 객체에 저장되므로, 
+	  Controller에서 별도로 처리할 필요없음. Controller에서는 Authentication 객체를 가져와서 로그인된 사용자의 정보를 바로 사용
+	*/
+	
+	
+	
+	
+	
+	
+	
 	
 //	@GetMapping("/myPage")
 //	@PreAuthorize("isAuthenticated()")
