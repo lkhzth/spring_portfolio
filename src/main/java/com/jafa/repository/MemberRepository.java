@@ -20,7 +20,4 @@ public interface MemberRepository {
 
 	// 마이페이지 회원정보 수정
 	void userInfoModify(MemberVO vo);
-
-	
-	
 }

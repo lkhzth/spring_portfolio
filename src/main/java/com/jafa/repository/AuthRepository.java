@@ -3,8 +3,8 @@ package com.jafa.repository;
 import com.jafa.domain.AuthVO;
 
 public interface AuthRepository {
-	// 회원등급 변경 추가 삭제
-	void save(AuthVO vo);
 
-	void remove(String memberId);
+	void save(AuthVO vo); // 회원등급변경 + 추가
+
+	void remove(String memberId); // 회원등급변경 + 삭제
 }

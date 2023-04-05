@@ -5,9 +5,10 @@
 
 <div class="container">
 	<div class="my-5">
-		<h1>관리자페이지</h1>
+		<h1>회원등급변경(관리자)</h1>
 	</div>
-	<form action="${contextPath}/member/updateMemberType?${_csrf.parameterName}=${_csrf.token}" method="post">
+	<form action="${contextPath}/member/updateMemberType" method="post">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		<table class="table">
 			<tr>
 				<th>회원번호</th>
@@ -18,7 +19,7 @@
 			
 			<c:forEach items="${list}" var="m" varStatus="mst">
 			<c:if test="${m.authList[0].memberType == mType[0] || m.authList[0].memberType != mType[0]}"><!-- ADMIN등급을 표시하지 않음 -->
-			<%-- <c:if test="${m.authList[0].memberType!=mType[0]}"><!-- ADMIN등급을 표시하지 않음 --> --%>
+			<%-- <c:if test="${m.authList[0].memberType!=mType[0]}"> --%>
 				<tr>
 					<td>${m.mno}</td>
 					<td>${m.memberId}

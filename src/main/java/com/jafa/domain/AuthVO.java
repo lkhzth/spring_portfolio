@@ -18,5 +18,4 @@ public class AuthVO {
 		this.memberId = memberId;
 		this.memberType = member;
 	}
-	
 }

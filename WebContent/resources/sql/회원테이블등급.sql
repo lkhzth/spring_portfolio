@@ -27,7 +27,22 @@ create table member_tbl_auth(
     references member_tbl(memberId)
 );
 
+CREATE TABLE persistent_logins(
+	username varchar(64) NOT NULL,
+	series varchar(64) PRIMARY KEY,
+	token varchar(64) NOT NULL,
+	last_used timestamp NOT NULL
+);
+
+create table persistent_logins (
+	username varchar(64) not null,
+	series varchar(64) primary key,
+	token varchar(64) not null,
+	last_used timestamp not null
+);
+
 select * from member_tbl;
 select * from member_tbl_auth;
+select * from persistent_logins;
 
 commit;

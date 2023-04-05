@@ -74,8 +74,6 @@
 				    </c:forEach>
 				</div>
 			
-			
-			
 			<div class="d-flex justify-content-center">
 				<ul class="pagination text-center">
 					<c:if test="${p.prev}">
@@ -103,3 +101,12 @@
 </div>	
 
 <%@ include file="layout/footer.jsp" %>
+
+<script>
+let message = "${message}";
+if(message!='') alert(message);
+
+let loginOn = "${loginOn}";
+if(loginOn!='') alert(loginOn);
+
+</script>

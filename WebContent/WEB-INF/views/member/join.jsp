@@ -11,7 +11,6 @@
           <div class="card-body p-md-5">
             <div class="row justify-content-center">
               <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-
                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">회원가입</p>
 				
 				<form class="mx-1 mx-md-4" action="${contextPath}/member/join" method="post">
@@ -70,6 +69,7 @@
                     <button class="btn btn-primary btn-lg">가입하기</button>
                   </div>
                 </form>
+                
               </div>
               <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
                 <img  style="border-radius: 15%; opacity: 0.8;" src="https://cdn.pixabay.com/photo/2020/02/19/20/15/macarons-4863165_960_720.jpg"
@@ -97,6 +97,10 @@
 </style>
 
 <script>
+
+let logining = "${logining}";
+if(logining) alert(logining);
+
 $(function() {
 	let error_form = $('.input-error');
 	console.log(error_form.length);

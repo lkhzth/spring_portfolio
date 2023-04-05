@@ -76,6 +76,7 @@ public class MemberController {
 		}
 		return "/member/login";
 	}
+
 	/* 
 	 	시큐리티 적용된 로그인
 	  login.jsp에서 클라이언트가 요청한 id와 password값이 form으로 전달이 되었다고 쳤을때 action의 요청이 controller로 가는 요청이여도 정보는 securityConfig.class의 
@@ -87,12 +88,6 @@ public class MemberController {
 	  즉, 클라이언트가 로그인 폼에서 전송한 아이디와 비밀번호는 Spring Security의 UsernamePasswordAuthenticationFilter에서 처리되어 인증 객체에 저장되므로, 
 	  Controller에서 별도로 처리할 필요없음. Controller에서는 Authentication 객체를 가져와서 로그인된 사용자의 정보를 바로 사용
 	*/
-	
-	
-	
-	
-	
-	
 	
 	
 //	@GetMapping("/myPage")
@@ -166,12 +161,12 @@ public class MemberController {
 	@GetMapping("/admin")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
 	public void doAdmin(Model model, @AuthenticationPrincipal MemberDetail memberDetail) {
-		System.out.println("*****************************************************************");
+//		System.out.println("*****************************************************************");
 		MemberVO memberVO = memberDetail.getMemberVO();
-		System.out.println("아이디 : " + memberVO.getMemberId());
-		System.out.println("이메일 : " + memberVO.getMemberEmail());
-		System.out.println("이메일 : " + memberVO.getMemberName());
-		System.out.println("*****************************************************************");
+//		System.out.println("아이디 : " + memberVO.getMemberId());
+//		System.out.println("이메일 : " + memberVO.getMemberEmail());
+//		System.out.println("이메일 : " + memberVO.getMemberName());
+//		System.out.println("*****************************************************************");
 		// 관리자만 허용
 		List<MemberVO> memberList = memberService.memberList();
 		model.addAttribute("list", memberList);
@@ -205,7 +200,10 @@ public class MemberController {
 	
 	// 회원등급 변경 처리
 	@PostMapping("/updateMemberType")
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')") 
+	// @PreAuthorize : 컨트롤러에서 메서드 단위로 권한 체크를 할 때 사용
+	// http.authorizeRequests() 메서드를 사용하여 권한 체크를 설정하고
+	// @PreAuthorize 어노테이션은 추가적인 권한 체크가 필요한 경우나 메서드에서 보다 세밀한 권한 체크를 수행
 	public String updateMemberType(AuthListDTO authListDTO, RedirectAttributes rttr) {
 		List<AuthVO> authList = authListDTO.getAuthList();
 		for(AuthVO vo : authList) {

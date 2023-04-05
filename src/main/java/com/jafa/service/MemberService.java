@@ -61,5 +61,4 @@ public class MemberService {
 	public List<MemberVO> memberList() {
 		return memberRepository.memberList();
 	}
-	
 }

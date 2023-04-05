@@ -84,7 +84,6 @@
 		      </div>
 		    </li>
 			
-
 		    <li class="nav-item rp">
 		    	<div class="d-flex justify-content-between">
 					<sec:authorize access="isAnonymous()"> <!-- 권한이 없는 경우(로그인을 하지 않은 경우) -->
@@ -95,7 +94,7 @@
 				
 				<div class="d-flex justify-content-between">
 					<div class="d-flex justify-content-between mr-3">
-						<sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')">
+						<sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')"> <!-- 권한이 있는 경우(로그인한 관리자, 부관리자) -->
 							<a class="nav-link" href="${contextPath}/member/admin">회원등급변경</a><br>
 							<a class="nav-link" href="${contextPath}/admin/cateProduct">관리자상품등록</a><br>
 							<a class="nav-link" href="${contextPath}/admin/cateBoard">관리자게시판등록</a><br>
@@ -111,6 +110,19 @@
 							</div>
 						</form>
 					</sec:authorize>
+					<!-- 
+						sec:authorize : Spring Security 태그 라이브러리 
+						JSP나 Thymeleaf와 같은 뷰 템플릿 엔진에서 사용. 사용자 인증상태 및 권한을 확인하여 뷰의 특정 부분을 보여주거나 숨김
+
+							access - 인증된 사용자가 특정 권한을 가지고 있는지
+							authenticated - 인증된 사용자인지
+							anonymous - 인증되지 않은 사용자인지
+							fullyAuthenticated - 사용자가 완전히 인증되었는지
+							hasRole - 지정된 역할을 가지고 있는지
+							hasAnyRole - 지정된 역할 중 하나 이상을 가지고 있는지 
+							hasAuthority - 지정된 권한을 가지고 있는지
+							hasAnyAuthority - 지정된 권한 중 하나 이상을 가지고 있는지
+					 -->
 				</div>
 		    </li>
 		  </ul>
