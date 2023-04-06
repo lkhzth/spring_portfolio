@@ -63,7 +63,7 @@ public class ProductController {
 	
 	// 상세
 	@GetMapping("/detail")
-	public String detail(Model model, Long product_Bno) {
+	public String detail(Model model, Long product_Bno) {		
 		model.addAttribute("b", repository.detail(product_Bno));
 		ProductVO attachList = repository.detail(product_Bno);
 		model.addAttribute("attachList", attachList);

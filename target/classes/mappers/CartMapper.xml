@@ -6,14 +6,24 @@
 <mapper namespace="com.jafa.repository.CartRepository">
   
   	<!-- 카트 목록 -->
-	<select id="getCart" resultType="cartDTO">
-		select a.cartId, a.memberId, a.product_bno, a.product_Count, b.PRODUCT_NAME, b.PRODUCT_PRICE
-		from cart_tbl a left outer join PRODUCT_TBL b on a.product_bno = b.product_bno
-		where memberId = #{memberId}	
+	<select id="getCart" resultType="cartVO">
+		SELECT distinct
+		  c.mno, 
+		  p.PRODUCT_BNO, p.PRODUCT_NAME, p.PRODUCT_PRICE
+		FROM 
+		  cart_tbl c
+		JOIN member_tbl m ON c.mno = m.mno
+		JOIN product_tbl p ON c.product_bno = p.PRODUCT_BNO
+		where c.mno=#{mno}
 	</select>
 	
-	<!-- 카트 확인 -->
-	<select id="checkCart" resultType="cartDTO">
+	<select id="getTotalCount" resultType="int">
+		select sum(product_count) as product_count  
+		from cart_tbl where mno=#{mno} and product_bno=#{product_Bno} 
+	</select>
+
+	<!-- 카트 상세 목록 -->
+	<select id="checkCart" resultType="cartVO">
 		select * from cart_tbl 
 		where memberId = #{memberId} and product_bno = #{product_bno}
 	</select>

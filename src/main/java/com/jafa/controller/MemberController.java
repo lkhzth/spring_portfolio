@@ -211,7 +211,7 @@ public class MemberController {
 				memberService.updateMemberType(vo);
 			}
 		}
-		rttr.addFlashAttribute("updateMember", "등급변경");
+		rttr.addFlashAttribute("updateMember", "회원등급변경성공");
 		return "redirect:/member/admin";
 	}
 	

@@ -18,8 +18,7 @@
 			</tr>
 			
 			<c:forEach items="${list}" var="m" varStatus="mst">
-			<c:if test="${m.authList[0].memberType == mType[0] || m.authList[0].memberType != mType[0]}"><!-- ADMIN등급을 표시하지 않음 -->
-			<%-- <c:if test="${m.authList[0].memberType!=mType[0]}"> --%>
+			<c:if test="${m.authList[0].memberType == mType[0] || m.authList[0].memberType != mType[0]}">
 				<tr>
 					<td>${m.mno}</td>
 					<td>${m.memberId}

@@ -82,8 +82,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/board/write").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
 		.antMatchers("/board/modify*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
 		.antMatchers("/board/delete*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		// 카트접근
+		.antMatchers("/cart/cartList").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
 		;
 
+
+		
 		// 한글 처리
 		CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
