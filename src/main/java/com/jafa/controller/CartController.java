@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jafa.domain.CartResultVO;
 import com.jafa.domain.CartVO;
 import com.jafa.repository.CartRepository;
 import com.jafa.service.CartService;
@@ -28,54 +31,42 @@ public class CartController {
 	@Autowired
 	CartRepository cartRepository;
 	
-	
-//	@RequestMapping(value = "/cartList", method = RequestMethod.GET)
-//	@PreAuthorize("isAuthenticated()")
-//	public String cartList(Model model) {
-//	    List<CartVO> cartList = cartRepository.getCart();
-//	    model.addAttribute("cart", cartList);    
-//	    return "cart/cartList";
-//	}
-	
+
+	// 장바구니목록(회원번호 mno로 조회한 상품리스트)
 	@RequestMapping(value = "/orderPage", method = RequestMethod.GET)
 	@PreAuthorize("isAuthenticated()")
 	public String cartList(@RequestParam("mno") Long mno, Model model) {
-	
-		
 		List<CartVO> cartList = cartRepository.getCart(mno);
-		for(CartVO vo :cartList) {
-			System.out.println(cartRepository.getTotalCount(vo.getMno(), vo.getProduct_bno()));
-			vo.setTotal_Count(cartRepository.getTotalCount(vo.getMno(), vo.getProduct_bno()));
-		}
-	
-		
+		Integer totalPrice = cartList.stream().map(vo->vo.getProduct_Price()*vo.getProduct_Count())
+			.reduce(0,(acc,price)-> acc+price);
 		model.addAttribute("cart", cartList);
+		model.addAttribute("totalPrice", totalPrice);
 		return "cart/orderPage";
 	}
-	// 상세
 	
-		
-	
-	
-	
-//	@PostMapping("/add")
-//	@ResponseBody
-//	@PreAuthorize("isAuthenticated()")
-//	public String addCartPOST(CartVO cart,  @AuthenticationPrincipal MemberDetail memberDetail) {
-//
-//		String memberId = memberDetail.getUsername();
-//		if(memberId == null) {
-//		return "5";
-//		}
-//		
-//		// 로그인한 사용자의 정보 가져오기
-////		String memberId = memberDetail.getUsername();
-//		System.out.println(memberId);
-//
-//		// 카트 등록
-//		cart.setMemberId(memberId);
-//		int result = cartService.addCart(cart);
-//		return result + "";
+	// 주문하기(상품상세페이지버튼클릭 후 실행--> 결과 장바구니페이지이동)
+	@PostMapping("/addCart")
+	public String addCart(CartVO cartVO, RedirectAttributes rttr) {
+		System.out.println("CartController : " +cartVO);
+	    cartService.addCart(cartVO);
+		return "redirect:orderPage?mno="+cartVO.getMno();
+	}
+
+	// 결제완료코드()  
+//		-----------------------> 아직 덜함 repository mapper만들어야함 리다이렉트는 다시 장바구니로 주문완료시 리스트삭제 뒤 마이페이지에 cartResultVO내역저장되야함
+
+//	@PostMapping("/addCartResult")
+//	public String addCartResult(CartResultVO cartResultVO, RedirectAttributes rttr) {
+//		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+//		System.out.println("CartController의 cartResultVO : " +cartResultVO);
+//		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+//		cartService.addCart(cartResultVO);
+//		return "redirect:orderPage?mno="+cartResultVO.getMno();
 //	}
-	
+
+
+
+
+
+
 }

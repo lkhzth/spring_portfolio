@@ -84,6 +84,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/board/delete*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
 		// 카트접근
 		.antMatchers("/cart/cartList").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+//		.antMatchers("/cart/orderPage").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
+		
+		/*	해당번호로만 접근(cart전체 적용해야함)------->>> 아직안했음 해야됨
+		 * .antMatchers("/cart/cartList")
+		 * .access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER') "
+		 * + "and @cartSecurity.checkMno(authentication, request.getParameter('mno'))")
+		 */
+		
 		;
 
 

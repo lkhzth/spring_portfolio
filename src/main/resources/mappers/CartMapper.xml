@@ -8,7 +8,7 @@
   	<!-- 카트 목록 -->
 	<select id="getCart" resultType="cartVO">
 		SELECT distinct
-		  c.mno, 
+		  c.mno, c.product_Count,
 		  p.PRODUCT_BNO, p.PRODUCT_NAME, p.PRODUCT_PRICE
 		FROM 
 		  cart_tbl c
@@ -17,26 +17,26 @@
 		where c.mno=#{mno}
 	</select>
 	
-	<select id="getTotalCount" resultType="int">
-		select sum(product_count) as product_count  
-		from cart_tbl where mno=#{mno} and product_bno=#{product_Bno} 
+	<!-- 주문목록수 -->
+	<select id="getTotalCount" resultType="Long">
+	    select CAST(sum(product_count) AS NUMBER) as product_count  
+	    from cart_tbl where mno=#{mno} and product_Bno=#{product_Bno} 
 	</select>
-
-	<!-- 카트 상세 목록 -->
-	<select id="checkCart" resultType="cartVO">
-		select * from cart_tbl 
-		where memberId = #{memberId} and product_bno = #{product_bno}
+	
+	<!-- service에서의 조건-> mno와 product_bno로 상품유무조회 -->
+	<select id="existProduct" resultType="int">
+		select count(*) from cart_tbl where mno=#{mno} and product_Bno=#{product_Bno}
 	</select>
-  
+	
 	<!-- 카트 추가 -->
-	<insert id="addCart">
-		insert into cart_tbl(memberId, product_bno, product_Count)
-		values(#{memberId}, #{product_bno}, #{product_Count}) 
+	<insert id="addCart" parameterType="cartVO">
+	  INSERT INTO cart_tbl(cartNum, mno, product_Bno, product_Count)
+	  VALUES (cartNum_SEQ.NEXTVAL, #{mno}, #{product_Bno},#{product_Count})
 	</insert>
 	
 	<!-- 카트 수량 수정 -->
-	<update id="modifyCount">
-		update cart_tbl set product_Count=#{product_Count} where cartId = #{cartId}
+	<update id="updateCart">
+		update cart_tbl set product_Count=product_Count+#{product_Count} where mno = #{mno} and product_Bno = #{product_Bno} 
 	</update>
 	
 	<!-- 카트 삭제 -->

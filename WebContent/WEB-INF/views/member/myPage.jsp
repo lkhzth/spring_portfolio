@@ -84,16 +84,30 @@
 					</tr>	
 				</c:otherwise>
 			</c:choose>
-		</table>
+		</table><br>
 		
 		<div class="jumbotron-center bg-white">
 			<h3>주문상세내역</h3>
 		</div>
 		<table class="table">
 			<tr>
-				${list}							
+				<th>주문번호</th>
+				<th>회원번호</th>
+				<th>상품번호</th>
+				<th>상품수량</th>
+				<th>상품이름</th>
+				<th>가격</th>
+				<th>총주문수량</th>
 			</tr>
+			<tr>
+				<td>${cart}</td>
+			</tr>
+			
 		</table>
+		
+		
+		
+		
 		
 		<div class="float-right">
 			<a class="btn btn-primary" href="${contextPath}">메인페이지</a>

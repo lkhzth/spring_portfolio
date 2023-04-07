@@ -4,28 +4,26 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.jafa.domain.BoardVO;
 import com.jafa.domain.CartVO;
-import com.jafa.domain.Category;
-import com.jafa.domain.Criteria;
 
 public interface CartRepository {
 		
 	/* 카트 목록 */
-	public List<CartVO> getCart(Long mno);
+	List<CartVO> getCart(Long mno);
 	
 	/*수량*/
-	int getTotalCount(@Param("mno") String mno, @Param("product_Bno") int product_Bno);
+	Long getTotalCount(@Param("mno") Long mno, @Param("product_Bno") Long product_Bno);
 	
 	/* 카트 추가 */
-	public int addCart(CartVO cart) throws Exception;
-	
+	int addCart(CartVO cartVO);
+
+	/* 상품이 저장되어있는지 확인 */
+	int existProduct(@Param("mno")Long mno, @Param("product_Bno")Long product_Bno);
+
 	/* 카트 수량 수정 */
-	public int modifyCount(CartVO cart);
+	int updateCart(CartVO cartVO);
 	
-	/* 카트 삭제 */
-	public int deleteCart(int cartId);
+//	/* 카트 삭제 */
+//	int deleteCart(int cartId);
 	
-//	/* 카트 확인 */
-//	public CartVO checkCart(CartVO cart);
 }

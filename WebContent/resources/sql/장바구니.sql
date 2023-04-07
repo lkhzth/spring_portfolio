@@ -12,12 +12,20 @@ CREATE TABLE cart_tbl (
 
 CREATE SEQUENCE cartNum_SEQ;
 
+-- 기존에 물품이 없을 때 
+select count(*) from cart_tbl where mno=2 and product_bno=1; -- 0
 INSERT INTO cart_tbl(cartNum, mno, product_bno, product_Count)
 VALUES (cartNum_SEQ.NEXTVAL, 2, 1, 1);
 
---  회원번호, 상품번호 
-select sum(product_count) as product_count  from cart_tbl where mno=2 and product_bno=1; 
+-- 기존 물품이 있을 때 
+select count(*) from cart_tbl where mno=2 and product_bno=1; -- 1
+update cart_tbl 
+set 
+    product_count = product_count + 2
+where 
+    mno = 2 and product_bno=1;
 
+select * from cart_tbl;
 
 COMMIT;
 

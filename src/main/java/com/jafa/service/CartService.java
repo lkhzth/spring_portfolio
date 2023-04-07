@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jafa.domain.CartVO;
 import com.jafa.repository.CartRepository;
@@ -19,19 +20,26 @@ public class CartService {
         return cartRepository.getCart(mno);
     }
 
-    /* 카트 추가 */
-    public int addCart(CartVO cart) throws Exception {
-        return cartRepository.addCart(cart);
+    /* 중복상품 조회한 후 추가/삭제 */
+    @Transactional
+    public void addCart(CartVO cartVO) {
+    	// 기존상품이 있는지 조회(쿼리문 작성 ) 
+    	int result = cartRepository.existProduct(cartVO.getMno(), cartVO.getProduct_Bno());
+
+    	if(result>=1){ // 기존 물품이 있을 때
+    		cartRepository.updateCart(cartVO);
+    	} else {  // 기존 물품이 없을 때 
+    		//  인서트
+    		// 기존 상품이 없을 때 : 인서트
+            // cartVO의 상품 개수를 1로 설정
+            // 인서트 쿼리문 실행
+            cartRepository.addCart(cartVO);
+    	}
     }
 
-    /* 카트 수량 수정 */
-    public int modifyCount(CartVO cart) {
-        return cartRepository.modifyCount(cart);
-    }
-
-    /* 카트 삭제 */
-    public int deleteCart(int cartId) {
-        return cartRepository.deleteCart(cartId);
-    }
+//    /* 카트 삭제 */
+//    public int deleteCart(int cartId) {
+//        return cartRepository.deleteCart(cartId);
+//    }
 
 }

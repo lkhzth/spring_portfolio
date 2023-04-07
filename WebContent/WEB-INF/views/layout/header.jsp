@@ -42,6 +42,7 @@
 
 <sec:authorize access="isAuthenticated()">
 	<sec:authentication property="principal.username" var="loginIdNow"/>
+	<sec:authentication property="principal.memberVO.mno" var="loginMnoNow"/>
 	<sec:authentication property="principal.memberVO.authList" var="authList"/>
 	<script>
 	let memberType = [];
@@ -65,7 +66,7 @@
 		    <li class="nav-item active">
 		      <a class="nav-link" href="${contextPath}">Home</a>
 		    </li>
- 
+			 
 		    <li class="dropdown">
 		      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">상품소개</a>
 		      <div class="dropdown-menu">
@@ -104,6 +105,7 @@
 						<form action="${contextPath}/member/logout" method="post">
 							<div class="d-flex justify-content-between">
 								<a class="nav-link" href="${contextPath}/member/myPage">마이페이지</a><br>
+								<a class="nav-link" href="${contextPath}/cart/orderPage?mno=${loginMnoNow}">장바구니</a><br>
 								<p class="lh"><b><sec:authentication property="principal.username" /></b>님 로그인 중</p>
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 								<button class="btn btn-danger ml-3">로그아웃</button>
