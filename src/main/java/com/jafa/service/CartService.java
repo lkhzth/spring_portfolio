@@ -1,11 +1,13 @@
 package com.jafa.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jafa.domain.CartResultVO;
 import com.jafa.domain.CartVO;
 import com.jafa.repository.CartRepository;
 
@@ -36,10 +38,12 @@ public class CartService {
             cartRepository.addCart(cartVO);
     	}
     }
-
-//    /* 카트 삭제 */
-//    public int deleteCart(int cartId) {
-//        return cartRepository.deleteCart(cartId);
-//    }
-
+    
+    @Transactional
+	public void orderResult(CartResultVO cartResult, Long mno, Long bno) {
+    	cartRepository.addCartResult(cartResult);
+		cartRepository.delSelected(mno, bno);
+    }
+    
+    
 }

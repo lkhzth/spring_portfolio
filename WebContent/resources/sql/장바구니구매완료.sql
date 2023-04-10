@@ -16,3 +16,14 @@ CREATE SEQUENCE cartResultNum_SEQ;
 select * from cartResult_tbl;
 
 COMMIT;
+
+
+SELECT 
+		  c.mno, c.product_Count,
+		  p.PRODUCT_BNO, p.PRODUCT_NAME, p.PRODUCT_PRICE
+		FROM 
+		  cartResult_tbl c
+		JOIN product_tbl p ON c.product_bno = p.PRODUCT_BNO
+		where c.mno=2;
+
+

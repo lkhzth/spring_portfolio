@@ -30,8 +30,6 @@ select * from cart_tbl;
 COMMIT;
 
 
-
-
 SELECT 
 		  c.cartNum, c.mno, c.product_Count,
 		  p.PRODUCT_BNO, p.PRODUCT_NAME, p.PRODUCT_PRICE

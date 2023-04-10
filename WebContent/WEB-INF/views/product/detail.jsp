@@ -7,9 +7,6 @@
 		<sec:authentication property="principal.memberVO" var="loginIdNow"/>
 </sec:authorize>
 
-${loginIdNow.mno}
-${b.product_Bno}
-
 <script src="${contextPath}/resources/js/productDetail.js"></script>
 
 <div class="container mt-5">
@@ -65,8 +62,6 @@ ${b.product_Bno}
 							<a href="${contextPath}/member/myPage"><button class="btn btn-white px-5" style="border : 1px solid blue;">주문내역</button></a>
 						</c:when>
 						<c:when test="${loginIdNow.authList[0].memberType eq mType[2] || loginIdNow.authList[0].memberType eq mType[3]}">
-							<!-- <button name="order" class="btn btn-primary px-5 buyBtn">주문하기</button>
-							<button class="btn btn-white px-5 orderSave" style="border : 1px solid blue;">주문내역</button> -->
 							<div class="button">
 								<div class="button_quantity">
 									주문수량
@@ -130,9 +125,13 @@ $(function() {
 
 	// 주문내역클릭
 	$('.orderSave').on('click', function() {
+		const token = $("[name='_csrf']").val()
+		const header = $("[name='_csrf_header']").val()
+		
 		$('<form/>').attr('method','get')
-			.attr('action','${contextPath}/cart/cartList')
+			.attr('action','${contextPath}/member/myPage')
 			.append('<input type="hidden" value="${loginIdNow.mno}" name="mno">')
+			.append($('<input/>').attr('type','hidden').attr('name','_csrf').val(token))
 			.appendTo('body')
 			.submit();
 	})

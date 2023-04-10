@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -16,11 +17,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jafa.domain.AuthListDTO;
 import com.jafa.domain.AuthVO;
+import com.jafa.domain.CartResultVO;
+import com.jafa.domain.CartVO;
 import com.jafa.domain.Category;
 import com.jafa.domain.MemberDTO;
 import com.jafa.domain.MemberDetail;
@@ -28,8 +32,10 @@ import com.jafa.domain.MemberType;
 import com.jafa.domain.MemberVO;
 import com.jafa.domain.ProductCategory;
 import com.jafa.repository.BoardRepository;
+import com.jafa.repository.CartRepository;
 import com.jafa.repository.MemberRepository;
 import com.jafa.repository.ProductRepository;
+import com.jafa.service.CartService;
 import com.jafa.service.MemberService;
 
 import lombok.extern.log4j.Log4j;
@@ -50,6 +56,9 @@ public class MemberController {
 	
 	@Autowired
 	ProductRepository productRepository;
+	
+	@Autowired
+	CartRepository cartRepository;
 	
 	@ModelAttribute("cateList")
 	public List<Category> cateList(){
@@ -129,6 +138,10 @@ public class MemberController {
 		} else  {
 			System.out.println("관리자 아님");
 		}
+		// 장바구니결제완료내역
+		Long mno = memberVO.getMno();
+		List<CartResultVO> cartList = cartRepository.getCartResultMyPage(mno);
+		model.addAttribute("cart", cartList);
 		return "/member/myPage";
 	}
 	

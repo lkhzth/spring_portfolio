@@ -52,21 +52,14 @@ public class CartController {
 		return "redirect:orderPage?mno="+cartVO.getMno();
 	}
 
-	// 결제완료코드()  
-//		-----------------------> 아직 덜함 repository mapper만들어야함 리다이렉트는 다시 장바구니로 주문완료시 리스트삭제 뒤 마이페이지에 cartResultVO내역저장되야함
-
-//	@PostMapping("/addCartResult")
-//	public String addCartResult(CartResultVO cartResultVO, RedirectAttributes rttr) {
-//		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++");
-//		System.out.println("CartController의 cartResultVO : " +cartResultVO);
-//		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++");
-//		cartService.addCart(cartResultVO);
-//		return "redirect:orderPage?mno="+cartResultVO.getMno();
-//	}
-
-
-
-
-
+	// 주문완료처리(선택된 목록 cartResultVO에 저장하고 + cartVO에서 삭제처리 ==> myPage에서 cartResultVO에서 저장된 완료목록 보이게)
+	@PostMapping("/delSelectedBoard")
+	public String delSelBoard(Long[] bnoList ,Long mno, RedirectAttributes rttr) {
+		for(Long bno : bnoList) {
+			CartResultVO cartResult = cartRepository.getCartResult(mno, bno);
+			cartService.orderResult(cartResult, mno, bno);
+		}
+		return "redirect:orderPage?mno="+mno;
+	}
 
 }

@@ -89,24 +89,28 @@
 		<div class="jumbotron-center bg-white">
 			<h3>주문상세내역</h3>
 		</div>
-		<table class="table">
+		<table class="table mt-3">
 			<tr>
-				<th>주문번호</th>
+				<th>구매번호</th>
 				<th>회원번호</th>
 				<th>상품번호</th>
-				<th>상품수량</th>
 				<th>상품이름</th>
-				<th>가격</th>
-				<th>총주문수량</th>
+				<th>상품단가</th>
+				<th>상품수량</th>
+				<th>상품가격</th>
 			</tr>
-			<tr>
-				<td>${cart}</td>
-			</tr>
-			
+			<c:forEach items="${cart}" var="c" varStatus="status">
+				<tr>
+					<td>${status.count}</td>
+					<td>${c.mno}
+					<td>${c.product_Bno}</td>
+					<td>${c.product_Name}</td>
+					<td>${c.product_Price}</td>
+					<td>${c.product_Count}</td>
+					<td>${c.product_Price * c.product_Count}</td>
+				</tr>
+			</c:forEach>
 		</table>
-		
-		
-		
 		
 		
 		<div class="float-right">

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CartResultVO {
-
 	private int cartResultNum; 
 	private Long mno;
 	private Long product_Bno;  

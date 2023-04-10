@@ -17,6 +17,7 @@
 		where c.mno=#{mno}
 	</select>
 	
+	
 	<!-- 주문목록수 -->
 	<select id="getTotalCount" resultType="Long">
 	    select CAST(sum(product_count) AS NUMBER) as product_count  
@@ -38,10 +39,40 @@
 	<update id="updateCart">
 		update cart_tbl set product_Count=product_Count+#{product_Count} where mno = #{mno} and product_Bno = #{product_Bno} 
 	</update>
+
+
+	<!-- 카트 추가결과(cartResultVO저장, cartVO삭제) -->
+	<insert id="addCartResult">
+	  INSERT INTO cartResult_tbl(cartResultNum, mno, product_Bno, product_Count)
+	  VALUES (cartResultNum_SEQ.NEXTVAL, #{mno}, #{product_Bno},#{product_Count}) <!-- orderDate컬럼 db에 DEFAULT SYSDATE, 기본값이므로 컬럼추가X -->
+	</insert> 
 	
-	<!-- 카트 삭제 -->
-	<delete id="deleteCart">
-		delete from cart_tbl where cartId = #{cartId}
+	<delete id="delSelected">
+		delete from cart_tbl where mno=#{mno} and product_Bno=#{product_Bno}
 	</delete>
+	
+	<!-- 카트결과처리리스트 -->
+	<select id="getCartResult" resultType="cartResultVO">
+		SELECT 
+		  c.mno, c.product_Count,
+		  p.PRODUCT_BNO, p.PRODUCT_NAME, p.PRODUCT_PRICE
+		FROM 
+		  cart_tbl c
+		JOIN product_tbl p ON c.product_bno = p.PRODUCT_BNO
+		where c.mno=#{mno} and p.PRODUCT_BNO=#{product_Bno}
+	</select>
+
+	<!-- 카트결과리스트 -->
+	<select id="getCartResultMyPage" resultType="cartResultVO">
+		<![CDATA[
+		SELECT 
+		  c.mno, c.product_Count,
+		  p.PRODUCT_BNO, p.PRODUCT_NAME, p.PRODUCT_PRICE
+		FROM 
+		  cartResult_tbl c
+		JOIN product_tbl p ON c.product_bno = p.PRODUCT_BNO
+		WHERE c.mno = #{mno}
+		]]>
+	</select>
 	
 </mapper>

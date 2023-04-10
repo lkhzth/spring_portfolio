@@ -202,7 +202,7 @@ $(function() {
 			replyService.add(reply, function(result){
 				alert(result); 
 				// ajax 처리후 결과 리턴.
-				modal.find("input").val("");
+				modal.find("input[name=reply]").val("");
 				// 모달창 초기화
 				modal.modal("hide"); // 모달창 숨기기
 				
