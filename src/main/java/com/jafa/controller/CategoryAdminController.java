@@ -1,12 +1,9 @@
 package com.jafa.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,23 +17,13 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping("/admin")
 @Log4j
-public class BoardAdminController {
+public class CategoryAdminController {
 	
 	@Autowired
 	BoardRepository boardRepository;
 	
 	@Autowired
 	ProductRepository productRepository;
-	
-	@ModelAttribute("cateList")
-	public List<Category> cateList(){
-		return boardRepository.getCateList();
-	}
-	
-	@ModelAttribute(value = "productCateList")
-	public List<ProductCategory> productCateList(){
-		return productRepository.getProductCateList();
-	}
 	
 	// 게시판 카테고리 목록, 추가, 삭제
 	@GetMapping("/cateBoard")

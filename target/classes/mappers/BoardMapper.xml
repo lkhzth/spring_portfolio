@@ -24,7 +24,6 @@
   		delete from CATEGORY_BOARD where cid=#{cid}
   	</delete>
   	
-  	
   	<resultMap type="boardVO" id="boardMap">
   		<result property="bno" column="bno"/>
   		<result property="title" column="title"/>

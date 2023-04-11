@@ -67,7 +67,7 @@
 		<![CDATA[
 		SELECT 
 		  c.mno, c.product_Count,
-		  p.PRODUCT_BNO, p.PRODUCT_NAME, p.PRODUCT_PRICE
+		  p.PRODUCT_BNO, p.PRODUCT_NAME, p.PRODUCT_PRICE, c.orderDate
 		FROM 
 		  cartResult_tbl c
 		JOIN product_tbl p ON c.product_bno = p.PRODUCT_BNO

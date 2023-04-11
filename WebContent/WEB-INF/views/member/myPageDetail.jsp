@@ -8,10 +8,12 @@
 </sec:authorize>
 
 <div class="container">
-	<h1>회원수정</h1>
+	<h2>회원정보수정</h2>
 	<form action="${contextPath}/member/modify" method="post">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-		<input type="text" name="mno" value="${bb.mno}">
+		<span class="badge badge-primary">회원번호 ${bb.mno}
+			<input type="hidden" name="mno" value="${bb.mno}">
+		</span>
 		<table class="table">
 			<tr>
 				<td>이름</td>

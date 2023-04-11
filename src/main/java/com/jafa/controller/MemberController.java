@@ -115,6 +115,7 @@ public class MemberController {
 //		return "/member/myPage";
 //	}
 	
+	// 마이페이지
 	@PreAuthorize("isAuthenticated()")
 	@RequestMapping("/myPage")
 	public String myPage(@AuthenticationPrincipal MemberDetail memberDetail, Model model) {

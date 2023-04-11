@@ -44,7 +44,7 @@
 	</div><br>
 	<div class="d-flex justify-content-end">	
 		<button name="cartResult" class="btn btn-info selDel">결제하기</button>
-		<button name="cartResultList" class="btn btn-primary ml-2 cartResultList">주문완료내역</button> <!-- 마이페이지로 보낼것 --> 
+		<button name="cartResultList" class="btn btn-primary ml-2 orderSave">주문완료내역</button> <!-- 마이페이지에서 완료 보이도록 --> 
 	</div>
 </div>
 
@@ -52,7 +52,7 @@
 
 <script>
 $(function() {
-	
+	// 체크박스 선택된 목록 리스트로 세팅
 	let bnoSet = new Set();
 	$('.bno_ckbox').on('change', function () {
 		let bno = $(this).val();
@@ -92,6 +92,18 @@ $(function() {
 		alert(bnoSet.size + '가지목록 주문완료.');
 	})
 	
+	// 주문완료내역클릭 
+	$('.orderSave').on('click', function() {
+		const token = $("[name='_csrf']").val()
+		const header = $("[name='_csrf_header']").val()
+		
+		$('<form/>').attr('method','get')
+			.attr('action','${contextPath}/member/myPage')
+			.append('<input type="hidden" value="${loginIdNow.mno}" name="mno">')
+			.append($('<input/>').attr('type','hidden').attr('name','_csrf').val(token))
+			.appendTo('body')
+			.submit();
+	})
 	
 });
 </script>

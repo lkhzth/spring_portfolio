@@ -63,13 +63,15 @@
 						</c:when>
 						<c:when test="${loginIdNow.authList[0].memberType eq mType[2] || loginIdNow.authList[0].memberType eq mType[3]}">
 							<div class="button">
-								<div class="button_quantity">
+								<div class="button_quantity mb-2">
 									주문수량
-									<input type="text" name="product_Count" value="1">
+									<input type="text" name="product_Count" value="1" size="3" style="border: 1px solid black; font-size: 15px; font-weight: bold;">
 								</div>
 								<div class="button_set">
 									<button name="order" class="btn btn-primary px-5 buyBtn">주문하기</button>
-									<button class="btn btn-white px-5 orderSave" style="border: 1px solid blue;">주문내역</button>
+									<a href="${contextPath}/cart/orderPage?mno=${loginIdNow.mno}">
+										<button class="btn btn-white px-4" style="border: 1px solid blue;">장바구니목록</button>
+									</a>
 								</div>
 							</div>
 						</c:when>
@@ -119,19 +121,6 @@ $(function() {
 			.append('<input type="hidden" value="${loginIdNow.mno}" name="mno">')
 			.append('<input type="hidden" value="${b.product_Bno}" name="product_Bno">')
 			.append($('[name="product_Count"]'))
-			.appendTo('body')
-			.submit();
-	})
-
-	// 주문내역클릭
-	$('.orderSave').on('click', function() {
-		const token = $("[name='_csrf']").val()
-		const header = $("[name='_csrf_header']").val()
-		
-		$('<form/>').attr('method','get')
-			.attr('action','${contextPath}/member/myPage')
-			.append('<input type="hidden" value="${loginIdNow.mno}" name="mno">')
-			.append($('<input/>').attr('type','hidden').attr('name','_csrf').val(token))
 			.appendTo('body')
 			.submit();
 	})

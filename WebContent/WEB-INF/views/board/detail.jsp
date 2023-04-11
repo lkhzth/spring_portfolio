@@ -20,7 +20,6 @@ ${authList[0].memberType}
 					 <input type="hidden" class="form-control" name="bno"
 						value='<c:out value="${b.bno}"/>' readonly="readonly">
 				</span>
-				
 				<span class="badge badge-info">${b.writer}</span>
 				<span class="ml-4">${b.title}</span>
 			</div>

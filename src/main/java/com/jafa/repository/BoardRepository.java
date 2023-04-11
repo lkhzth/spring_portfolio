@@ -10,9 +10,9 @@ public interface BoardRepository {
 		
 	// 게시판카테고리
 	List<Category> getCateList();
-
+	// 카테고리생성
 	void saveCate(Category category);
-
+	// 카테고리삭제
 	void delCate(String cid);
 
 	// 게시판
