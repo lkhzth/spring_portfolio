@@ -24,15 +24,15 @@ public class ProductFileController {
 
 	@GetMapping("/imgProductDisplay")
 	public ResponseEntity<byte[]> imgDisplay(String fileName) throws IOException{
-		File file = new File("c:/file_product",fileName); // 1/상품이이지.jpg
-		if (!file.exists()) {
-			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND); 
+		File file = new File("c:/file_product",fileName); // "c:/file_product" 폴더아래에 있는 fileName으로 지정된 파일을 찾음(1/상품이이지.jpg)
+		if (!file.exists()) { // 요청받은 fileName으로 지정된 이미지 파일이 존재하지 않을 경우
+			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND); // 404 상태 코드를 반환하여 이미지 파일이 없음을 알려줌
 		}
-		
-		HttpHeaders headers = new HttpHeaders();
+		HttpHeaders headers = new HttpHeaders(); // 응답헤더 생성
 		FileNameMap fileNameMap = URLConnection.getFileNameMap();
-		headers.add("Content-Type", fileNameMap.getContentTypeFor(fileName));
-		return new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file), headers, HttpStatus.OK);
+		headers.add("Content-Type", fileNameMap.getContentTypeFor(fileName)); // fileName을 통해 이미지 파일의 MIME 타입을 찾아서 응답 헤더에 추가
+		return new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file), headers, HttpStatus.OK); 
+		// 이미지 파일을 byte[] 형태로 읽어와서 ResponseEntity<byte[]> 형태로 응답을 반환
 	}
 	
 	@GetMapping(value = "/productDownload", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

@@ -6,7 +6,7 @@
 <mapper namespace="com.jafa.repository.ProductRepository">
   
   	<!-- 카테고리 -->
-  	<resultMap type="productCategory" id="cateMap">
+  	<resultMap type="productCategory" id="cateMap"> 
   		<result property="cateId" column="cateId"/>
   		<result property="cateName" column="cateName"/>
   	</resultMap>
@@ -37,24 +37,30 @@
 		<result property="fileName_Product" column="fileName_Product"/>
 		<result property="fileType_Product" column="fileType_Product"/>
 		<collection property="productCategory" resultMap="cateMap"/>
+		<!-- 
+			<collection> 태그의 property 속성은 productVO 객체 안의 컬렉션 프로퍼티인 productCategory와 매핑
+		 -->
   	</resultMap>
   
-	<sql id="condition">
-		<trim prefix="and">
+  	<!-- 검색준비 -->
+	<sql id="condition"> 
+		<trim prefix="and"> <!-- trim태그-> SQL 조건절에서 불필요한부분 자동제거, 필요부분만 유지 prefix-> 조건절 접두사 and로 시작할때 유용한 조건절 생성 -->
 			<choose>
-				<when test="type == 'N'.toString()"> 
+				<when test="type == 'N'.toString()"> <!-- type이 N일때 product_Name컬럼과 keyword를 이용한 LIKE 조건절생성 --> 
 					product_Name like '%'||#{keyword}||'%'
 				</when>
-				<when test="type == 'C'.toString()">
+				<when test="type == 'C'.toString()"> <!-- type이 C일때 product_Content컬럼과 keyword를 이용한 LIKE 조건절생성 -->
 					product_Content like '%'||#{keyword}||'%'
 				</when>
 			</choose>
 		</trim>
 		<if test="productCategory != null and productCategory.cateId != null and productCategory.cateId != ''">
-			and p.cateId = #{productCategory.cateId}
+			<!-- productCategory 객체와 .cateId 프로퍼티가 null이 아니고, 빈 문자열이 아닌 경우 -->
+			and p.cateId = #{productCategory.cateId} 
 		</if> 
 	</sql>
 	
+	<!--  -->
 	<select id="getTotalCount" resultType="int">
 		select count(*) from PRODUCT_TBL P
 		<where>

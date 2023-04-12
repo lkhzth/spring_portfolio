@@ -1,13 +1,10 @@
 package com.jafa.repository;
 
-import static org.junit.Assert.*;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jafa.AppTest;
-import com.jafa.domain.BoardVO;
 import com.jafa.domain.ReplyVO;
 
 public class ReplyRepositoryTest extends AppTest{
@@ -16,7 +13,7 @@ public class ReplyRepositoryTest extends AppTest{
 	ReplyRepository replyRepository;
 	
 	@Test
-	@Ignore
+	
 	public void test1() {
 		replyRepository.read(1L);
 	}
@@ -31,6 +28,7 @@ public class ReplyRepositoryTest extends AppTest{
 	}
 
 	@Test
+	@Ignore
 	public void test3() {
 		replyRepository.delete(4L);
 	}

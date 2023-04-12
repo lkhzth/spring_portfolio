@@ -15,7 +15,7 @@ public interface ProductRepository {
 
 	void delProductCate(String cateId);
 
-	// 게시판
+	// 상품CRUD
 	// 목록
 	List<ProductVO> list(ProductCriteria productCriteria);
 	
