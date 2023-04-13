@@ -67,8 +67,8 @@ public class ProductController {
 	@GetMapping("/detail")
 	public String detail(Model model, Long product_Bno) {		
 		model.addAttribute("b", productRepository.detail(product_Bno));
-		ProductVO attachList = productRepository.detail(product_Bno);
-		model.addAttribute("attachList", attachList);
+//		ProductVO attachList = productRepository.detail(product_Bno); 
+//		model.addAttribute("attachList", attachList); 이미지다운로드용 코드
 		model.addAttribute("mType", MemberType.values());
 		return "product/detail";
 	}
@@ -130,7 +130,7 @@ public class ProductController {
 	 		@RequestParam("attachFile") MultipartFile multipartFile) {
 		if (delChk) {
 			// 파일 삭제 및 내용 변경
-			// 파일삭제
+			// 파일과 폴더 삭제
 			ProductVO detail = productRepository.detail(vo.getProduct_Bno());
 			File file = new File("c:/file_product/"+detail.getProduct_Bno()+"/"+detail.getFileName_Product());
 			File folder = new File("c:/file_product/"+detail.getProduct_Bno());

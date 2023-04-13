@@ -15,11 +15,11 @@
             <article>
                 <header class="mb-4">
                     <h1 class="fw-bolder mb-1">${b.product_Name}</h1>
-                    <span class="text-center" style="font-size:15px">${b.product_Intro}</span>
                     <span class="badge badge-primary">상품번호 ${b.product_Bno}
                     	<input type="hidden" class="form-control" name="bno"
 						value='<c:out value="${b.product_Bno}"/>' readonly="readonly">
-                    </span>
+                    </span><br>
+                    <span class="text-center" style="font-size:15px">${b.product_Intro}</span>
                 </header>
                 <div>
 	            	<figure class="mb-4">

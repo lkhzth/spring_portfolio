@@ -15,7 +15,7 @@
 					<th>상품아이디</th>
 					<th colspan="2">상품이름</th>
 				</tr>
-				<c:forEach items="${productCateList}" var="cp">
+				<c:forEach items="${cateProductList}" var="cp">
 	<!-- 리스트안들어옴 
 		 롬복동작안함->> 최초 카테고리아이디를 cProductId로 생성했을때 property속성못받음
 		 결국 다시 cateId로 db컬럼바꿈

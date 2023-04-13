@@ -74,9 +74,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/member/myPageDetail").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
 		// 상품접근
 		.antMatchers("/product/detail*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
-		.antMatchers("/product/write").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
 		.antMatchers("/product/modify*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
 		.antMatchers("/product/delete*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
+		.antMatchers("/product/write").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN')")
 		// 게시판접근
 		.antMatchers("/board/detail*").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")
 		.antMatchers("/board/write").access("hasAnyRole('ROLE_ADMIN','ROLE_SUB_ADMIN','ROLE_REGULAR_MEMBER','ROLE_ASSOCIATE_MEMBER')")

@@ -60,11 +60,12 @@
 		</if> 
 	</sql>
 	
-	<!--  -->
+	<!-- 상품테이블의 모든 레코드 수 조회하고 sql로 작성한 검색기능을 include   -->
 	<select id="getTotalCount" resultType="int">
 		select count(*) from PRODUCT_TBL P
 		<where>
 			<include refid="condition" />
+			<!-- <include>-> SQL코드의 재사용을 위한태그, 위 정의된 SQL 코드를 참조하여 동적인검색조건생성 refid-> SQL코드의 id값 -->
 		</where>
 	</select>
   
@@ -82,7 +83,7 @@
 	            c.cateId, c.cateName       
 	        FROM 
 	        PRODUCT_TBL p
-	        INNER JOIN CATEGORY_PRODUCT c 
+	        INNER JOIN CATEGORY_PRODUCT c  
 	        ON c.cateId = p.cateId
 	        WHERE rownum <= #{maxRow}
 	        ]]>
@@ -92,6 +93,21 @@
 	    WHERE rn > #{minRow}
 	    ]]>
 	</select>  
+		<!-- 
+		<![CDATA[ ... ]]> -> CDATA섹션은 쿼리안에 XML태그를 포함할 수 있도록 특수하게 문법적인 처리를 해줌
+		70행~73행 : 실제로 상품 목록을 조회하는 SQL 쿼리
+		74행~86행( ... ) : 서브쿼리 정의, 상품테이블과 카테고리테이블을 조인하여 상품정보와 상품카테고리정보를 함께 조회한 뒤 결과를 가져오고, rownum 값을 rn이라는 별칭으로 할당
+						  조인 조건은 c.cateId = p.cateId로, CATEGORY_PRODUCT 테이블의 cateId 컬럼과 PRODUCT_TBL 테이블의 cateId 컬럼을 조인
+		조회결과는 ProductVO객체의 필드와 ProductCategory객체의 필드에 매핑됨
+		<include> 태그를 사용 id가 condition인 SQL조건문을 참조한후 sql문 내 if절의 productCategory를 찾을때 productCategory가 있는 ProductCriteria객체로 접근,
+		객체 내 필드값을 사용하여 최대레코드 수(#{maxRow})와 최소 레코드 수(#{minRow})를 계산하여 결과를 페이징 처리
+		86행~87행 : c.cateId = p.cateId는 카테고리테이블의 cateId와 상품테이블의 cateId가 같은 값일때, 두 테이블을 INNER JOIN, 두 테이블의 관련된 데이터를 연결하고 조회 
+		
+		rownum : 오라클에서 사용되는 가상의 컬럼, 각 행의 고유한번호를 나타냄. rownum은 조회된 행의 순서를 나타내며, 1부터 시작하여 각 행이 조회되는 순서대로 1씩 증가
+		rownum을 활용하여 페이징구현. 별칭 rn을 써서 상품테이블과 카테고리테이블 조인결과에 rownum 값을 할당하고, 이를 활용하여 rn > #{minRow} 조건을 적용함으로써,
+		minRow 값보다 큰 rn 값을 가진 행들만 조회되도록 필터링, 이를 통해 minRow부터 maxRow까지의 범위의 행들만 조회되는 페이징 기능이 구현
+	 -->
+	
 
 	<select id="detail" resultType="productVO">
 		select * from PRODUCT_TBL where PRODUCT_BNO=#{PRODUCT_BNO} 
